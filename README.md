@@ -12,7 +12,8 @@ can't make the changes such as post Operating System install but prior to instal
 ## Prerequisites
 
 ### Ventoy USB
-Ventoy is a operating system install tool that can store several ISO's onto a USB drive that you can then choose to install when you boot from the Ventoy USB. 
+
+Ventoy is a operating system install tool that can store several ISO's onto a USB drive that you can then choose to install when you boot from the Ventoy USB.
 The idea being that it will be easier in the future to add ISO's to your usb and you don't have to constantly reformat the USB.
 
 Ventoy creates an exFAT or NTFS parition by default and we can save iso files and any other file onto this partition
@@ -71,6 +72,9 @@ The way this works is through the included Preseed configuration to configure De
 
 ### Debian Install Overview
 
+Details of the Debian install are covered in this linked [README](./roles/debian_server/README.md).
+
+### Run Debian Install
 
 ## Arch Linux Desktop
 
@@ -81,6 +85,7 @@ scripts found in this repository.
 
 ### Arch Install Overview
 
+### Run Arch Install
 
 ## Raspberry PI Device
 
@@ -89,8 +94,9 @@ scripts found in this repository.
 ### Raspberry Pi Overview
 
 Installing the raspberry pi os onto a raspberry pi can be done using the raspberry pi imager that can be opened from the firmware as long as it is updated or newer on the device. That may require a single sd card that has
-that newer firmware available and then installed onto the raspberry pi. 
+that newer firmware available and then installed onto the raspberry pi.
 
 If that firmware is available on the raspberry pi then we can boot the raspberry pi with a blank sd card, boot into the raspberry pi imager on the device, and use a usb stick with the raspberry pi os iso and then install
 it onto the raspberry pi device. Then once that is all finished we could run our ansible playbooks for the raspberry pi.
 
+### Run Raspberry Pi Install
