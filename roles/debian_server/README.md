@@ -31,7 +31,7 @@ This will serve as the growing list of services and packages that I want running
 
 Here is the step by step:
 
-### 3) Setup Ansible and other scripts on USB stick
+### Setup Ansible and other scripts on USB stick
 
 Ventoy creates a standard FAT32/ExFAT parition, we can add a folder for Ansible and our post-install scripts.
 
