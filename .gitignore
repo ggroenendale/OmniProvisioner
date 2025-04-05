@@ -1,3 +1,5 @@
 # Ignore ISOs folder for version control
 /isos
 
+# Ignore vault_pass.txt file
+.vault_pass.txt
