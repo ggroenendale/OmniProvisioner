@@ -1,0 +1,6 @@
+# grub-mkconfig:
+# - Reads /etc/default/grub for base settings
+# - Executes all scripts in /etc/grub.d/ (in numerical order)
+# - Combines all this to generate /boot/grub/grub.cfg
+- name: Update GRUB config
+  command: grub-mkconfig -o /boot/grub/grub.cfg
