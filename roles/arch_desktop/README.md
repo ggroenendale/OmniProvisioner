@@ -7,6 +7,52 @@ scripts found in this repository.
 
 ---
 
+The software, packages, and tools to be installed in this configuration are broken down into these categories:
+
+- System Packages and Utilities
+- System Monitoring and Debugging
+- User and Security Management
+- File System and Disk Tools
+- Networking and DNS
+- Desktop Environment
+- Development and CLI Tools
+- Additional Software
+
+> NOTE: In order to see a list of packages and their versions that come with the iso we are working with we can  
+> navigate to the following url: [https://archive.archlinux.org/iso/2025.03.01/arch/pkglist.x86_64.txt]
+
+### System Tools and Utilities
+
+#### SSH
+
+#### Nvidia Drivers
+
+#### GRUB
+
+#### Paru
+
+#### Fonts
+
+### System Monitoring and Debugging
+
+### User and Security Management
+
+### File System and Disk Tools
+
+#### btrfs-progs
+
+#### Parted
+
+#### rsync
+
+#### zstd
+
+### Networking and DNS
+
+#### Networkmanager
+
+#### wget & curl
+
 ### Desktop Environment -> Custom
 
 I may come to regret this decision but I have decided to essentially combine all of the things I would normally
@@ -21,6 +67,8 @@ needs a different version of that library. If for example Waybar and Hyprland ea
 Python and installing the newer version and removing the older version somehow breaks one of those components.
 
 But we will cross that bridge when or if we get to it.
+
+#### Sound -> Pipewire
 
 #### Terminal -> Wezterm
 
@@ -69,7 +117,19 @@ I am still unsure between clipman and cliphist which one is best, because cliphi
 clipboard but with clipman I at least found a simple config to tie it with fuzzel. wl-clip-persist extends the
 history for the clipboard to include stuff even if an application closes.
 
-### Browser -> LibreWolf + Zen Browser
+### Development tools
+
+#### Git + Credential Manager
+
+#### Neovim
+
+#### k3s
+
+#### kdash
+
+### Additional Software
+
+#### Browser -> LibreWolf + Zen Browser
 
 This decision was more in the realm of what is performant and privacy focused but also helps me as a web app
 developer. So far I am looking at Librewolf for the privacy focus and I also like Thorium. I may also install Zen
@@ -81,14 +141,6 @@ But for simplicity I am going to stick with LibreWolf.
 
 I also tested Zen browser and I really like it. I could see using Zen browser as a replacement for installing
 the Spotify Linux app or other desktop apps.
-
-### Development tools
-
-#### Neovim
-
-#### k3s
-
-#### kdash
 
 ### Other Packages
 
@@ -143,12 +195,23 @@ and move to a different Linux distro.
 
 ---
 
-How this works is we begin with an Arch ISO that we will modify before running the scripts in this repository
-and installing some of its requirements, namely `python 3.12` and the 3.0.2 version of `archinstall` from their git
-repository.
+Our end goal is to manage most of the Arch configuration with an Ansible playbook. In order to run an ansible
+playbook we first need to install Ansible and also have some of the basic configurations like the file system and
+partitions.
 
-However we first need to begin with `archiso` as that is what we will use to modify the ISO to begin with in order
-to automate the rest of the process.
+We will begin with the `archiso` package so we can modify a fresh Arch ISO. We are going to add a script that runs
+a basic archinstall config to make sure the hard drive is partitioned, mirrors are configured, and install ansible.
+
+We can run `archiso` while in an Arch live environment and we can modify that iso or download and configure a newer
+iso. From within the iso, we can copy the `releng` archiso configuration to the home folder of the root user
+in the live environment. We can then edit the files inside this iso copy and place an `install.sh` bash script
+to run upon os install.
+
+This is the script that will first run archinstall, and then run ansible.
+
+In order for the archinstall to run correctly, we need to install our python and json configuration files into the
+iso copy. The last thing the archinstall config should do is clone this repository in order to get the latest
+configs and then run the playbook.
 
 ### Installation
 
@@ -156,15 +219,18 @@ to automate the rest of the process.
 
 #### Archiso install
 
-To begin with we need to be working within the Arch iso.
+To begin with we need to be working within an Arch iso live environment. So we will boot into the Arch linux live
+environment from Ventoy. We then need to make sure the archiso package is installed. A fresh arch iso should
+include this package, however we can also install it with pacman:
 
 ```bash
 sudo pacman -S archiso
-
-
 ```
 
-#### Python 3.12
+We are going to create an iso that on install runs the archinstall module with our python file configuration. We
+can copy the `releng` configuration from `archiso` directory
+
+#### Python 3.13
 
 The Arch Linux ISO version that I am currently working with is `2025.03.01` and this comes with Python 3.13.2 so
 this should work out of the box for our script.
@@ -178,7 +244,21 @@ pacman -Sy python
 
 #### Archinstall
 
-Now retrieve the 3.0.2 zip file from github.
+The version of the archinstall library that is in the March 1st 2025 iso is 3.0.2 thus our python and json files
+need to conform with this version.
+
+To use archinstall we just need to run our python file, we dont need to archinstall as a python module.
+
+```bash
+python install_arch.py
+```
+
+## Development
+
+### Archinstall configuration
+
+In order to develop the archinstall config with the correct version in our arch iso which is 3.0.2, we can copy
+the release file from github, unpack and install the library into a development virtual environment.
 
 ```bash
 curl https://github.com/archlinux/archinstall/archive/refs/tags/3.0.2.zip -o /tmp/archinstall.zip
