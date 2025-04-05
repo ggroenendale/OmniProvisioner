@@ -1,0 +1,6 @@
+- name: Install UFW
+  pacman:
+    name: ufw
+    state: present
+- name: Allow SSH
+  command: ufw allow 22/tcp
