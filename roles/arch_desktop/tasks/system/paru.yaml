@@ -1,0 +1,43 @@
+---
+- name: Install paru dependencies (base-devel and git)
+  pacman:
+    name:
+      - base-devel
+      - git
+    state: present
+    update_cache: yes
+
+- name: Clone paru from AUR
+  git:
+    repo: https://aur.archlinux.org/paru.git
+    dest: /tmp/paru
+    clone: yes
+    force: yes
+
+- name: Build and install paru
+  command:
+    cmd: makepkg -si --noconfirm
+    chdir: /tmp/paru
+  become: yes
+  become_user: nobody # Build as unprivileged user (security best practice)
+  environment:
+    HOME: /tmp # Needed for makepkg to work correctly
+
+- name: Clean up build files
+  file:
+    path: /tmp/paru
+    state: absent
+
+- name: Configure paru (optional)
+  copy:
+    content: |
+      # Skip review prompts
+      SkipReview
+      # Remove make dependencies after install
+      RemoveMake
+      # Enable colored output
+      Color
+    dest: /etc/paru.conf
+    owner: root
+    group: root
+    mode: "0644"
