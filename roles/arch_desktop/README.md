@@ -19,7 +19,9 @@ The software, packages, and tools to be installed in this configuration are brok
 - Additional Software
 
 > NOTE: In order to see a list of packages and their versions that come with the iso we are working with we can  
-> navigate to the following url: [https://archive.archlinux.org/iso/2025.03.01/arch/pkglist.x86_64.txt]
+> navigate to the following url: [https://archive.archlinux.org/iso/2025.03.01/arch/pkglist.x86_64.txt](https://archive.archlinux.org/iso/2025.03.01/arch/pkglist.x86_64.txt)
+> take note of the date which is the version of the arch linux iso, at the time of writing we are working with the
+> March 01, 2025 build.
 
 ### System Tools and Utilities
 
