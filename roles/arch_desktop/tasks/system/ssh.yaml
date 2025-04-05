@@ -1,0 +1,74 @@
+---
+- name: Install OpenSSH (the standard SSH server/client)
+  pacman:
+    name: openssh
+    state: present
+    update_cache: yes
+
+- name: Ensure SSH directory exists
+  file:
+    path: /etc/ssh
+    state: directory
+    mode: "0755"
+
+- name: Configure sshd_config (secure defaults)
+  template:
+    src: sshd_config.j2
+    dest: /etc/ssh/sshd_config
+    owner: root
+    group: root
+    mode: "0600"
+  notify: Restart SSH
+
+- name: Enable SSH service (but don't start yet)
+  systemd:
+    name: sshd
+    enabled: yes
+    masked: no
+
+- name: Generate SSH host keys (if missing)
+  command: ssh-keygen -A
+  args:
+    creates: /etc/ssh/ssh_host_ed25519_key
+  when: not ansible_check_mode
+
+- name: Start SSH service (final step)
+  systemd:
+    name: sshd
+    state: started
+
+# Optional Tools
+- name: Install optional SSH utilities
+  pacman:
+    name:
+      - sshpass # For password auth in scripts (insecure)
+      - mosh # Mobile shell (UDP-based)
+      - sshfs # SSH filesystem
+      - rsync # Efficient file transfers
+    state: present
+    when: install_ssh_utils | default(false)
+
+- name: Configure client (~/.ssh/config)
+  template:
+    src: ssh_client_config.j2
+    dest: "~/.ssh/config"
+    mode: "0600"
+  when: configure_client | default(false)
+
+# Security Hardening
+- name: Install fail2ban for SSH protection
+  pacman:
+    name: fail2ban
+    state: present
+  when: ssh_fail2ban | default(false)
+
+- name: Configure fail2ban for SSH
+  copy:
+    content: |
+      [sshd]
+      enabled = true
+      maxretry = 3
+      bantime = 1h
+    dest: /etc/fail2ban/jail.d/sshd.conf
+  when: ssh_fail2ban | default(false)
+  notify: Restart fail2ban
