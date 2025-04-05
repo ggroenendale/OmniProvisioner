@@ -51,15 +51,33 @@ Arch and Debian iso's and additional files.
 Ventoy-USB/
 ├── ventoy/
 │   └── ventoy.json
-├── ArchLinux/
-│   ├── InstallScripts/
-│   │   └── setup.sh
-│   ├── archlinux-version-x86_64.iso
-│   └── archlinux-version-x86_64.iso.sig
-└── Debian/
-    ├── InstallScripts/
-    │   └── setup.sh
-    └── debian-version-amd64-DVD-1.iso
+├── isos/
+│   ├── Arch
+│   ├── Debian
+│   └── RaspberryPi
+├── playbooks/
+│   ├── desktop.yaml
+│   ├── device.yaml
+│   └── server.yaml
+├── requirements/
+│   └── common.yaml
+├── roles/
+│   ├── arch_desktop/
+│   │   └── tasks
+│   ├── debian_server/
+│   │   └── tasks
+│   └── raspberrypi_device/
+│       └── tasks
+├── scripts/
+│   ├── arch/
+│   │   └── arch_install.sh
+│   ├── debian/
+│   │   └── debian_install.sh
+│   └── raspberrypi/
+│       └── raspberrypi_install.sh
+├── .gitignore
+├── ansible.cfg
+└── README.md
 ```
 
 ## Debian Network Server
@@ -84,6 +102,8 @@ I am making the move to Arch Linux and I will be handling a lot of the installat
 scripts found in this repository.
 
 ### Arch Install Overview
+
+Details of the Arch install are covered in this linked [README](./roles/arch_desktop/README.md)
 
 ### Run Arch Install
 
