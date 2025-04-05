@@ -1,0 +1,86 @@
+# =========================
+# Verification Steps
+# =========================
+
+# SSH Verification
+- name: Verify SSH is running
+  command: ss -tulpn | grep sshd
+  register: ssh_status
+  changed_when: false
+
+- name: Check SSH config syntax
+  command: sshd -t
+  changed_when: false
+
+- name: Display SSH version
+  debug:
+    msg: "SSH active ({{ ssh_status.stdout }})"
+
+# Git Verification
+- name: Verify git installation
+  command: git --version
+  register: git_version
+  changed_when: false
+
+- name: Check git config
+  command: git config --list
+  register: git_config
+  changed_when: false
+
+- name: Display git status
+  debug:
+    msg:
+      - "Git {{ git_version.stdout }} installed"
+      - "User: {{ git_config.stdout | regex_search('user.name=.*') }}"
+      - "Email: {{ git_config.stdout | regex_search('user.email=.*') }}"
+
+- name: Verify SSH auth works
+  command: ssh -T git@github.com
+  register: ssh_check
+  changed_when: false
+  ignore_errors: true
+
+- name: Verify GCM config
+  command: git credential-manager get
+  when: use_gcm | default(false)
+  register: gcm_check
+  changed_when: false
+
+- name: Show auth status
+  debug:
+    msg:
+      - "SSH: {{ 'Working' if 'successfully authenticated' in ssh_check.stderr else 'Check keys' }}"
+      - "GCM: {{ 'Ready' if use_gcm | default(false) else 'Not configured' }}"
+
+# SDDM Verification
+- name: Check SDDM status
+  command: systemctl is-active sddm
+  register: sddm_status
+  changed_when: false
+
+- name: Verify NVIDIA in Xorg log
+  command: grep -i nvidia /var/log/Xorg.0.log
+  register: xorg_nvidia
+  changed_when: false
+
+- name: Display results
+  debug:
+    msg:
+      - "SDDM status: {{ sddm_status.stdout }}"
+      - 'Xorg NVIDIA detection: {{ ''SUCCESS'' if ''Loaded modules: "nvidia"'' in xorg_nvidia.stdout else ''FAILED'' }}'
+
+# Nvidia Verification
+- name: Verify NVIDIA module is loaded
+  command: lsmod | grep nvidia
+  register: nvidia_module
+  failed_when: nvidia_module.rc != 0
+  changed_when: false
+
+- name: Check NVIDIA driver version
+  command: nvidia-smi --query-gpu=driver_version --format=csv,noheader
+  register: nvidia_version
+  changed_when: false
+
+- name: Display driver version
+  debug:
+    msg: "NVIDIA driver {{ nvidia_version.stdout }} is installed"
