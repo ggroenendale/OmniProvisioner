@@ -1,0 +1,13 @@
+---
+- name: Install SDDM packages
+  pacman:
+    name:
+      - sddm
+      - xorg-server
+    state: present
+    update_cache: yes
+
+- name: Enable SDDM
+  systemd:
+    name: sddm
+    enabled: yes
