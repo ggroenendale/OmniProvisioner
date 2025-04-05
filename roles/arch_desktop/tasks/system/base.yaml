@@ -1,0 +1,15 @@
+- name: Install essential base packages
+  pacman:
+    name:
+      - base
+      - base-devel # Compiler toolchain
+      - linux-headers # For DKMS modules
+      - archlinux-keyring # Keyring updates
+      - pacman-contrib # paccache, vercmp, etc.
+      - reflector # Mirror optimization
+      - linux
+      - linux-firmware
+      - mkinitcpio
+      - man-db
+      - man-pages
+    state: present
