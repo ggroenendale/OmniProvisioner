@@ -1,0 +1,10 @@
+{
+  "!root-password": "super_pwd",
+  "!users": [
+    {
+      "!password": "@S$ba11s",
+      "sudo": true,
+      "username": "geoff"
+    }
+  ]
+}
