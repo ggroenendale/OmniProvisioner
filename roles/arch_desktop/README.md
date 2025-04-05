@@ -18,7 +18,7 @@ The software, packages, and tools to be installed in this configuration are brok
 - Development and CLI Tools
 - Additional Software
 
-> NOTE: In order to see a list of packages and their versions that come with the iso we are working with we can  
+> NOTE: In order to see a list of packages and their versions that come with the iso we are working with we can
 > navigate to the following url: [https://archive.archlinux.org/iso/2025.03.01/arch/pkglist.x86_64.txt](https://archive.archlinux.org/iso/2025.03.01/arch/pkglist.x86_64.txt)
 > take note of the date which is the version of the arch linux iso, at the time of writing we are working with the
 > March 01, 2025 build.
@@ -222,15 +222,19 @@ configs and then run the playbook.
 #### Archiso install
 
 To begin with we need to be working within an Arch iso live environment. So we will boot into the Arch linux live
-environment from Ventoy. We then need to make sure the archiso package is installed. A fresh arch iso should
-include this package, however we can also install it with pacman:
+environment from our Ventoy USB. We then need to make sure the archiso package is installed. A fresh arch iso
+should include this package, however we can also install it with pacman:
 
 ```bash
 sudo pacman -S archiso
 ```
 
 We are going to create an iso that on install runs the archinstall module with our python file configuration. We
-can copy the `releng` configuration from `archiso` directory
+can copy the `releng` configuration from the `archiso` directory into a working folder to edit it.
+
+```bash
+cp -r /usr/share/archiso/configs/releng ~/new-iso
+```
 
 #### Python 3.13
 
@@ -249,10 +253,67 @@ pacman -Sy python
 The version of the archinstall library that is in the March 1st 2025 iso is 3.0.2 thus our python and json files
 need to conform with this version.
 
-To use archinstall we just need to run our python file, we dont need to archinstall as a python module.
+To use archinstall we just need to run our python file, we dont need to run archinstall as a python module.
 
 ```bash
 python install_arch.py
+```
+
+#### Ansible
+
+To run our ansible configuration, after the archinstall configuration installs ansible, we can run our ansible
+playbook with the `ansible-playbook` command with our desktop playbook:
+
+```bash
+ansible-playbook playbooks/desktop.yaml
+```
+
+#### Copy files into new arch iso
+
+After adding our files to the new iso configuration the folder structure should look like this:
+
+```
+new-iso/
+├── airootfs/
+│   ├── etc/
+│   ├── root/
+│   │   ├── OmniProvisioner/   # These files will be cloned during the archinstall script
+│   │   │   ├── group_vars/
+│   │   │   ├── playbooks/
+│   │   │   ├── requirements/
+│   │   │   ├── roles/
+│   │   │   └── ansible.cfg
+│   │   ├── arch_install.sh    # install script
+│   │   ├── install_arch.py    # archinstall configuration
+│   │   ├── archconfig.json    # json configuration
+│   │   └── .vault_pass.txt    # Secrets password file, moved into OmniProvisioner by archinstall
+│   └── usr/
+├── efiboot/
+├── grub/
+├── syslinux/
+├── bootstrap_packages.x86_64
+├── packages.x86_64
+├── pacman.conf
+└── profiledef.sh
+```
+
+To do this run the `copy_files_to_newiso.sh` bash script.
+
+#### Build the new iso
+
+Once that is taken care of, run `mkarchiso` to build the new iso, and save this iso back to the Ventoy USB.
+
+```bash
+mkarchiso -v -w /tmp/archiso-work -o /tmp /mnt/newiso
+```
+
+#### Boot into the new iso and run arch_install.sh
+
+At this point the base configuration should be all setup in our new iso, and we have booted into that iso. It
+should be as simple as running the install script and then rebooting.
+
+```bash
+arch_install.sh
 ```
 
 ## Development
