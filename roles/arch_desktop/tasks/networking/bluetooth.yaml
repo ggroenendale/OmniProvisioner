@@ -1,0 +1,46 @@
+# Install required packages
+- name: Install Bluetooth stack
+  pacman:
+    name:
+      - bluez
+      - bluez-utils
+      - pulseaudio-bluetooth # For audio support
+      - blueman # GUI manager (optional)
+    state: present
+
+# Load kernel module
+- name: Load btusb module
+  modprobe:
+    name: btusb
+    state: present
+
+# Enable services
+- name: Start Bluetooth service
+  systemd:
+    name: bluetooth
+    enabled: yes
+    state: started
+
+# Configure user permissions (replace 'user' with your username)
+- name: Add user to lp group (for Bluetooth)
+  user:
+    name: "{{ ansible_user_id }}"
+    groups: lp
+    append: yes
+
+# Configure auto-power-on
+- name: Set Bluetooth auto-power-on
+  lineinfile:
+    path: /etc/bluetooth/main.conf
+    regexp: "^#AutoEnable="
+    line: "AutoEnable=true"
+    backup: yes
+  notify: Restart bluetooth
+
+# Optional: Enable A2DP sink (high-quality audio)
+- name: Configure PulseAudio for A2DP
+  lineinfile:
+    path: /etc/pulse/system.pa
+    line: "load-module module-bluetooth-policy"
+    create: yes
+  when: "'pulseaudio' in ansible_facts.packages"
