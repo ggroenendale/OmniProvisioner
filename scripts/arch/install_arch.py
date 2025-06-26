@@ -1,36 +1,5 @@
 """Installation of Arch Linux using python to configure settings
 
-Node js install:
-curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash
-
-in lieu of restarting the shell
-\. "$HOME/.nvm/nvm.sh"
-
-nvm install 22
-
-node -v # Should print "v22.14.0".
-
-nvm current # Should print "v22.14.0".
-
-npm -v # Should print "10.9.2".
-
-apt install wezterm
-apt install stow
-curl https://raw.githubusercontent.com/jesseduffield/lazydocker/master/scripts/install_update_linux.sh | bash
-Commandline: apt install gem
-Commandline: apt install ruby-full
-Commandline: apt install -y nodejs
-Commandline: apt install stow
-Commandline: apt install fd-find
-Commandline: apt install pip
-Commandline: apt install xclip xsel wl-clipboard
-Commandline: apt-get install ripgrep
-Commandline: apt install luarocks
-Commandline: apt install libparted-dev
-
-Commandline: apt install python3.12 python3.12-venv
-Commandline: apt install python3.12-dev
-geoff@geoff-ubuntu:~$ 
 
 """
 import subprocess
