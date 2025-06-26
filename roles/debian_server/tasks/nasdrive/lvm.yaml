@@ -1,0 +1,53 @@
+# Install LVM
+#
+# Logical Volume Manager is what I use to make logical volumes with in the RAID so
+# that the Raid can be partitioned into different spaces. Logical volumes can be
+# extended and managed differently giving some more resources and priorities with
+# the hardware.
+#
+
+- name: Install LVM
+  apt:
+    name: lvm2
+    state: present
+
+- name: Scan for volume groups
+  command: vgscan
+  register: vgscan_result
+  changed_when: false
+
+- name: Activate all volume groups
+  command: vgchange -ay
+  register: vgchange_result
+  changed_when: "'0 logical volume(s) in volume group' not in vgchange_result.stdout"
+  failed_when: "'No volume groups found' in vgchange_result.stdout"
+
+- name: Check if LVM logical volume exists
+  stat:
+    path: /dev/mapper/aconcagua--lvm--primary-lvm--large--vol
+  register: lvm_volume_status
+
+- name: Create mount point for the LVM volume
+  file:
+    path: /mnt/large-vol
+    state: directory
+    mode: "0755"
+  when: lvm_volume_status.stat.exists
+
+- name: Mount the LVM logical volume
+  mount:
+    path: /mnt/large-vol
+    src: /dev/mapper/aconcagua--lvm--primary-lvm--large--vol
+    fstype: ext4
+    opts: defaults
+    state: mounted
+  when: lvm_volume_status.stat.exists
+
+- name: Ensure LVM volume is in fstab for persistence
+  mount:
+    path: /mnt/large-vol
+    src: /dev/mapper/aconcagua--lvm--primary-lvm--large--vol
+    fstype: ext4
+    opts: defaults
+    state: present
+  when: lvm_volume_status.stat.exists
