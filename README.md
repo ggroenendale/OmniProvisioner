@@ -120,3 +120,33 @@ If that firmware is available on the raspberry pi then we can boot the raspberry
 it onto the raspberry pi device. Then once that is all finished we could run our ansible playbooks for the raspberry pi.
 
 ### Run Raspberry Pi Install
+
+## Mobile Device
+
+---
+
+### Mobile Device Overview
+
+I am also in the process of looking for a future mobile device solution that I can rely on. Mostly what I want is a way to keep the phone clean of bloatware and create my own apps and make it work with my other systems
+somewhat seemlessly.
+
+It seems the primary way to make this work is to not use Verizon for the phone. It seems like Mint Mobile or something similar is my best pathway forward. I could also get a data sim card for a future tablet or laptop
+that I use remotely, even my HP Elitebook has a sim card slot and a WWAN card.
+
+The options that are dividing me the most are:
+
+- Device Memory: I want at least 8GB of RAM possibly more
+- Customizable: I want to be able to write applications ideally in Python, I might slug it out and learn Java or Kotlin to make other things if I have to get an Android device.
+- Degoogled, private, secure: hence the open source software and as much access and permissions as possible
+- Repairable: This means if parts go bad I want to be able to replace them, also be able to reinstall the software via ansible
+- 2 sim cards?: This is a low priority but its nice to have. It might be mostly important that its an actual card and not just eSIM
+
+Phone features that I actually need regardless of solution:
+
+- Bluetooth: I need this for headphones and music and calls
+- Decent battery life: not a big concern as long as it doesnt limit me
+- USB-C Charging: Non-negotiable
+- MicroSD storage: Non-negotiable
+- Camera: The actual camera quality doesn't matter much, but whatever OS I choose needs to be able to use the camera
+- GPS: Non-negotiable, I need maps
+- NFC: not absolutely critical but would be nice to have, I'm not even sure I could use this for payments with open source software
