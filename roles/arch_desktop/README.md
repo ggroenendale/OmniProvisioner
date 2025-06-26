@@ -3,170 +3,6 @@
 I am making the move to Arch Linux and I will be handling a lot of the installation using the configurations and
 scripts found in this repository.
 
-## Overview of Whats Included
-
----
-
-The software, packages, and tools to be installed in this configuration are broken down into these categories:
-
-- System Packages and Utilities
-- System Monitoring and Debugging
-- User and Security Management
-- File System and Disk Tools
-- Networking and DNS
-- Desktop Environment
-- Development and CLI Tools
-- Additional Software
-
-> NOTE: In order to see a list of packages and their versions that come with the iso we are working with we can
-> navigate to the following url: [https://archive.archlinux.org/iso/2025.03.01/arch/pkglist.x86_64.txt](https://archive.archlinux.org/iso/2025.03.01/arch/pkglist.x86_64.txt)
-> take note of the date which is the version of the arch linux iso, at the time of writing we are working with the
-> March 01, 2025 build.
-
-### System Tools and Utilities
-
-#### SSH
-
-#### Nvidia Drivers
-
-#### GRUB
-
-#### Paru
-
-#### Fonts
-
-### System Monitoring and Debugging
-
-### User and Security Management
-
-### File System and Disk Tools
-
-#### btrfs-progs
-
-#### Parted
-
-#### rsync
-
-#### zstd
-
-### Networking and DNS
-
-#### Networkmanager
-
-#### wget & curl
-
-### Desktop Environment -> Custom
-
-I may come to regret this decision but I have decided to essentially combine all of the things I would normally
-get with a desktop environment and just put in place each one that I want. I think I have a problem with
-installing a monolithic piece of software with a bunch of dependencies that may become hard to manage as time
-goes on. I think this will also give me more flexibility as I go through the process of setting up Arch the way
-I want it.
-
-I especially like the idea of updating 1 part of my configuration and not having the entire component of software
-fail. However, I can picture some issues arising if two components rely on one library and one of those components
-needs a different version of that library. If for example Waybar and Hyprland each need a different version of
-Python and installing the newer version and removing the older version somehow breaks one of those components.
-
-But we will cross that bridge when or if we get to it.
-
-#### Sound -> Pipewire
-
-#### Terminal -> Wezterm
-
-Wezterm is my preferred terminal. I like that it is customizable in lua which is just a delightful easy language.
-
-#### Window Manager -> Hyprland
-
-Hyprland is the goat and I am excited to get into customizing it.
-
-#### App Launcher -> Fuzzel or Walker
-
-I decided to go with fuzzel. It's wayland native which should jive well with Hyprland which also depends on
-Wayland. It can also be customized using a fuzzel.ini file in `.config/fuzzel`. I've also been looking at Walker
-which seems to have more recent development and might be less resource intensive. I am not sure yet.
-
-#### Authentication Agent -> hyprpolkitagent
-
-The thing that pops up when you need to authenticate something.
-
-#### File Manager -> Thunar
-
-I'm not real sure on File Managers. I know that I'm not super satisfied with Nautilus and Dolphin seems like its
-a bit too heavy for what I need. Thunar also seems pretty extensible so I think for now we will go with that.
-
-#### Panels, System Tray, & Widgets -> Waybar & Eww
-
-Waybar is also Wayland based and works with Hyprland and Fuzzel. I'm also including Eww as well for custom
-widgets.
-
-#### Notifications -> Mako
-
-Seen this recommended a couple times for notifications.
-
-#### Settings & System Configuration -> Several
-
-I first want to note `xdg-desktop-portal-hyprland` and I will explain more about what it does another time
-
-#### Wallpaper -> swww
-
-It seems to have the most customization and I think it supports animated wallpapers. Also seems to make it easy
-to switch wallpapers or write a script that changes them.
-
-#### Clipboard -> clipman + wl-clip-persist
-
-I am still unsure between clipman and cliphist which one is best, because cliphist is able to copy images to the
-clipboard but with clipman I at least found a simple config to tie it with fuzzel. wl-clip-persist extends the
-history for the clipboard to include stuff even if an application closes.
-
-### Development tools
-
-#### Git + Credential Manager
-
-#### Neovim
-
-#### k3s
-
-#### kdash
-
-### Additional Software
-
-#### Browser -> LibreWolf + Zen Browser
-
-This decision was more in the realm of what is performant and privacy focused but also helps me as a web app
-developer. So far I am looking at Librewolf for the privacy focus and I also like Thorium. I may also install Zen
-browser depending on if I want something that is quiet and nice to use.
-
-After some testing I found LibreWolf to be faster than Thorium on Ubuntu 22.04. I found Thorium to be a bit
-buggy with some graphical errors. It may be some configuration issues or some miscommunication with Nvidia.
-But for simplicity I am going to stick with LibreWolf.
-
-I also tested Zen browser and I really like it. I could see using Zen browser as a replacement for installing
-the Spotify Linux app or other desktop apps.
-
-### Other Packages
-
-This will mostly serve as a space for me to remember all of the tools that I use and dump some things from my brain.
-
-A list of packages I need to install that are particularly necessary as libraries or installers
-
-- cargo
-- nvm
-- npm
-- nodejs
-- helm
-- gem
-- ruby-full
-- stow
-- fd-find
-- ripgrep
-- luarocks
-- libparted-dev
-- Spark
-- Zot (OCI Container registry)
-- Podman
-- gawk (makes bash config editing scripts work)
-
 ## Installation
 
 ---
@@ -337,6 +173,172 @@ We then need to navigate into the new archinstall folder and pip install its con
 cd archinstall
 pip install .
 ```
+
+## Overview of Whats Included
+
+---
+
+The software, packages, and tools to be installed in this configuration are broken down into these categories:
+
+- System Packages and Utilities
+- System Monitoring and Debugging
+- User and Security Management
+- File System and Disk Tools
+- Networking and DNS
+- Desktop Environment
+- Development and CLI Tools
+- Additional Software
+
+> NOTE: In order to see a list of packages and their versions that come with the iso we are working with we can
+> navigate to the following url: [https://archive.archlinux.org/iso/2025.03.01/arch/pkglist.x86_64.txt](https://archive.archlinux.org/iso/2025.03.01/arch/pkglist.x86_64.txt)
+> take note of the date which is the version of the arch linux iso, at the time of writing we are working with the
+> March 01, 2025 build.
+
+### System Tools and Utilities
+
+#### SSH
+
+#### Nvidia Drivers
+
+#### GRUB
+
+#### Paru
+
+#### Fonts
+
+### System Monitoring and Debugging
+
+### User and Security Management
+
+### File System and Disk Tools
+
+#### btrfs-progs
+
+#### Parted
+
+#### rsync
+
+#### zstd
+
+### Networking and DNS
+
+#### Networkmanager
+
+#### wget & curl
+
+### Desktop Environment -> Custom
+
+I may come to regret this decision but I have decided to essentially combine all of the things I would normally
+get with a desktop environment and just put in place each one that I want. I think I have a problem with
+installing a monolithic piece of software with a bunch of dependencies that may become hard to manage as time
+goes on. I think this will also give me more flexibility as I go through the process of setting up Arch the way
+I want it.
+
+I especially like the idea of updating 1 part of my configuration and not having the entire component of software
+fail. However, I can picture some issues arising if two components rely on one library and one of those components
+needs a different version of that library. If for example Waybar and Hyprland each need a different version of
+Python and installing the newer version and removing the older version somehow breaks one of those components.
+
+But we will cross that bridge when or if we get to it.
+
+#### Sound -> Pipewire
+
+#### Terminal -> Wezterm
+
+Wezterm is my preferred terminal. I like that it is customizable in lua which is just a delightful easy language.
+
+#### Window Manager -> Hyprland
+
+Hyprland is the goat and I am excited to get into customizing it.
+
+#### App Launcher -> Fuzzel or Walker
+
+I decided to go with fuzzel. It's wayland native which should jive well with Hyprland which also depends on
+Wayland. It can also be customized using a fuzzel.ini file in `.config/fuzzel`. I've also been looking at Walker
+which seems to have more recent development and might be less resource intensive. I am not sure yet.
+
+#### Authentication Agent -> hyprpolkitagent
+
+The thing that pops up when you need to authenticate something.
+
+#### File Manager -> Thunar
+
+I'm not real sure on File Managers. I know that I'm not super satisfied with Nautilus and Dolphin seems like its
+a bit too heavy for what I need. Thunar also seems pretty extensible so I think for now we will go with that.
+
+#### Panels, System Tray, & Widgets -> Waybar & Eww
+
+Waybar is also Wayland based and works with Hyprland and Fuzzel. I'm also including Eww as well for custom
+widgets.
+
+#### Notifications -> Mako
+
+Seen this recommended a couple times for notifications.
+
+#### Settings & System Configuration -> Several
+
+I first want to note `xdg-desktop-portal-hyprland` and I will explain more about what it does another time
+
+#### Wallpaper -> swww
+
+It seems to have the most customization and I think it supports animated wallpapers. Also seems to make it easy
+to switch wallpapers or write a script that changes them.
+
+#### Clipboard -> clipman + wl-clip-persist
+
+I am still unsure between clipman and cliphist which one is best, because cliphist is able to copy images to the
+clipboard but with clipman I at least found a simple config to tie it with fuzzel. wl-clip-persist extends the
+history for the clipboard to include stuff even if an application closes.
+
+### Development tools
+
+#### Git + Credential Manager
+
+#### Neovim
+
+#### k3s
+
+#### kdash
+
+### Additional Software
+
+#### Browser -> LibreWolf + Zen Browser
+
+This decision was more in the realm of what is performant and privacy focused but also helps me as a web app
+developer. So far I am looking at Librewolf for the privacy focus and I also like Thorium. I may also install Zen
+browser depending on if I want something that is quiet and nice to use.
+
+After some testing I found LibreWolf to be faster than Thorium on Ubuntu 22.04. I found Thorium to be a bit
+buggy with some graphical errors. It may be some configuration issues or some miscommunication with Nvidia.
+But for simplicity I am going to stick with LibreWolf.
+
+I also tested Zen browser and I really like it. I could see using Zen browser as a replacement for installing
+the Spotify Linux app or other desktop apps.
+
+### Other Packages
+
+This will mostly serve as a space for me to remember all of the tools that I use and dump some things from my brain.
+
+A list of packages I need to install that are particularly necessary as libraries or installers
+
+- cargo
+- nvm
+- npm
+- nodejs
+- helm
+- gem
+- ruby-full
+- stow
+- fd-find
+- ripgrep
+- luarocks
+- libparted-dev
+- Spark
+- Zot (OCI Container registry)
+- Podman
+- gawk (makes bash config editing scripts work)
+
+
 
 ### Notes from python config file
 
