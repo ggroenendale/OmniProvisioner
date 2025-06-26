@@ -70,7 +70,14 @@ fs_handler.perform_filesystem_operations()
 
 
 def run_command(command, check=True):
-    """ Helper function to run shell commands """
+    """
+    Helper function to run shell commands
+
+    :param command: The terminal command as a string.
+    :type command: str
+    :param check: Passes to subprocess.run(...,...,check=check)
+    :type check: bool
+    """
     subprocess.run(command, shell=True, check=check)
 
 
@@ -90,10 +97,10 @@ def setup_provisioner_files(username):
 
 # Start the guided installation
 with Installer(
-    target=MOUNTPOINT,
-    disk_config=DISK_CONFIG,
-    disk_encryption=DISK_ENC,
-    kernels=KERNELS) as installation:
+        target=MOUNTPOINT,
+        disk_config=DISK_CONFIG,
+        disk_encryption=DISK_ENC,
+        kernels=KERNELS) as installation:
     installation.mount_ordered_layout()
 
     if installation.minimal_installation():
@@ -102,7 +109,7 @@ with Installer(
 
         # Add grub as bootloader
         installation.add_bootloader(Bootloader.Grub)
-        
+
         # Define the network setup which should pull from the config file
         network_config: NetworkConfiguration | None = config.network_config
 
