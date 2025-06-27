@@ -150,4 +150,4 @@ with Installer(
         profile_handler.install_profile_config(installation, profile_config)
 
         # Clone OmniProvisioner
-        setup_provisioner_files()
+        # setup_provisioner_files()
