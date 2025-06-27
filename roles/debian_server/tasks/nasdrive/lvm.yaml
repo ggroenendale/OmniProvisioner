@@ -22,32 +22,70 @@
   changed_when: "'0 logical volume(s) in volume group' not in vgchange_result.stdout"
   failed_when: "'No volume groups found' in vgchange_result.stdout"
 
-- name: Check if LVM logical volume exists
+# ================================================================================
+#   large-vol LVM
+# ================================================================================
+
+- name: Check if large-vol LVM logical volume exists
   stat:
     path: /dev/mapper/aconcagua--lvm--primary-lvm--large--vol
-  register: lvm_volume_status
+  register: large-vol-lvm_volume_status
 
-- name: Create mount point for the LVM volume
+- name: Create mount point for the large-vol LVM volume
   file:
     path: /mnt/large-vol
     state: directory
     mode: "0755"
-  when: lvm_volume_status.stat.exists
+  when: large-vol-lvm_volume_status.stat.exists
 
-- name: Mount the LVM logical volume
+- name: Mount the large-vol LVM logical volume
   mount:
     path: /mnt/large-vol
     src: /dev/mapper/aconcagua--lvm--primary-lvm--large--vol
     fstype: ext4
     opts: defaults
     state: mounted
-  when: lvm_volume_status.stat.exists
+  when: large-vol-lvm_volume_status.stat.exists
 
-- name: Ensure LVM volume is in fstab for persistence
+- name: Ensure large-vol LVM volume is in fstab for persistence
   mount:
     path: /mnt/large-vol
     src: /dev/mapper/aconcagua--lvm--primary-lvm--large--vol
     fstype: ext4
     opts: defaults
     state: present
-  when: lvm_volume_status.stat.exists
+  when: large-vol-lvm_volume_status.stat.exists
+
+# ================================================================================
+#   dev-vol LVM
+# ================================================================================
+
+- name: Check if dev-vol LVM logical volume exists
+  stat:
+    path: /dev/mapper/aconcagua--lvm--primary-lvm--large--vol
+  register: dev-vol-lvm_volume_status
+
+- name: Create mount point for the large-vol LVM volume
+  file:
+    path: /mnt/large-vol
+    state: directory
+    mode: "0755"
+  when: dev-vol-lvm_volume_status.stat.exists
+
+- name: Mount the large-vol LVM logical volume
+  mount:
+    path: /mnt/large-vol
+    src: /dev/mapper/aconcagua--lvm--primary-lvm--large--vol
+    fstype: ext4
+    opts: defaults
+    state: mounted
+  when: dev-vol-lvm_volume_status.stat.exists
+
+- name: Ensure large-vol LVM volume is in fstab for persistence
+  mount:
+    path: /mnt/large-vol
+    src: /dev/mapper/aconcagua--lvm--primary-lvm--large--vol
+    fstype: ext4
+    opts: defaults
+    state: present
+  when: dev-vol-lvm_volume_status.stat.exists
