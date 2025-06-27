@@ -22,10 +22,10 @@ cd ~/new-iso
 
 # And the Ventoy USB should be mounted with all of the scripts and configs.
 #   lsblk -f  #Find the USB device name i.e. /dev/sdb
-#
+#   ls -l /dev/disk/by-id/
 VENTOY_DEV="/dev/disk/by-id/usb-PNY_USB_3.1_FD_0700150D9DADBA90-0:0-part1"
-mkdir -p "$VENTOY_MOUNT"
-mount -t vfat -o rw,umask=000 "${VENTOY_DEV}-part1" "$VENTOY_MOUNT"
+# mkdir -p "$VENTOY_MOUNT"
+# mount -t vfat -o rw,umask=000 "${VENTOY_DEV}-part1" "$VENTOY_MOUNT"
 
 # Verify Ventoy Mount
 echo "Checking /mnt/ventoy mount..."
@@ -45,6 +45,33 @@ cp -r "$VENTOY_MOUNT/scripts/arch/install_arch.py" "$PROFILE_DIR/airootfs/root/"
 cp -r "$VENTOY_MOUNT/scripts/arch/archconfig.json" "$PROFILE_DIR/airootfs/root/"
 cp -r "$VENTOY_MOUNT/.vault_pass.txt" "$PROFILE_DIR/airootfs/root/"
 
+# Create the autoinstall service for the complete automated setup
+
+create_autoinstall_service() {
+    local airootfs_dir="$1"
+    local exec_script="/root/arch_install.sh"
+
+    mkdir -p "$airootfs_dir/etc/systemd/system/"
+
+    cat <<EOF > "$airootfs_dir/etc/systemd/system/autoinstall.service"
+[Unit]
+Description=Automatic Arch Installer
+After=network.target
+
+[Service]
+Type=oneshot
+ExecStart=$exec_script
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+    echo "Created autoinstall.service in $airootfs_dir"
+}
+
+# Create the autoinstall.service file
+create_autoinstall_service "$PROFILE_DIR/airootfs"
+
 # Once these files are inside the airootfs then we should be able to repackage the iso
 mkarchiso -v -o "$OUTPUT_DIR" "$PROFILE_DIR"
 
@@ -56,3 +83,4 @@ mv "$ISO" "$OUTPUT_DIR/$CUSTOM_NAME"
 
 # Finally, copy the new-iso back onto the ventoy usb so it can be used in the next load.
 cp "$OUTPUT_DIR/$CUSTOM_NAME" "$VENTOY_MOUNT/isos/Arch/"
+
