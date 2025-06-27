@@ -12,7 +12,7 @@ scripts found in this repository.
 1. Boot into the Arch Linux live environment
 2. Mount the Ventoy USB
 3. Run the `archinstall-configure-newiso.sh` script
-4. Run the `arch_install.sh`
+4. Run the `arch_install.sh`, which then runs the archinstall script
 
 ### Reasons for using Archinstall
 
