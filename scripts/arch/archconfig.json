@@ -12,7 +12,8 @@
         "device": "/dev/sda",
         "partitions": [
           {
-            "btrfs": [],
+            "mountpoint": "/boot",
+            "obj_id": "2c3fa2d5-2c79-4fab-86ec-22d0ea1543c0",
             "flags": ["boot"],
             "fs_type": "fat32",
             "size": {
@@ -20,56 +21,68 @@
               "unit": "MiB",
               "value": 512
             },
-            "mount_options": [],
-            "mountpoint": "/boot",
-            "obj_id": "2c3fa2d5-2c79-4fab-86ec-22d0ea1543c0",
             "start": {
               "sector_size": null,
               "unit": "MiB",
               "value": 1
             },
-            "status": "create",
-            "type": "primary"
+            "type": "primary",
+            "status": "create"
           },
           {
-            "btrfs": [],
-            "flags": [],
-            "fs_type": "ext4",
-            "size": {
-              "sector_size": null,
-              "unit": "GiB",
-              "value": 20
-            },
-            "mount_options": [],
             "mountpoint": "/",
             "obj_id": "3e7018a0-363b-4d05-ab83-8e82d13db208",
-            "start": {
-              "sector_size": null,
-              "unit": "MiB",
-              "value": 513
-            },
-            "status": "create",
-            "type": "primary"
-          },
-          {
-            "btrfs": [],
-            "flags": [],
-            "fs_type": "ext4",
+            "fs_type": "btrfs",
             "size": {
               "sector_size": null,
               "unit": "Percent",
               "value": 100
             },
             "mount_options": [],
-            "mountpoint": "/home",
-            "obj_id": "ce58b139-f041-4a06-94da-1f8bad775d3f",
             "start": {
               "sector_size": null,
-              "unit": "GiB",
-              "value": 20
+              "unit": "MiB",
+              "value": 513
             },
             "status": "create",
-            "type": "primary"
+            "type": "primary",
+            "btrfs": [
+              {
+                "name": "@",
+                "mountpoint": "/",
+                "mount_options": ["compress=zstd", "noatime"]
+              },
+              {
+                "name": "@home",
+                "mountpoint": "/home",
+                "mount_options": ["compress=zstd", "noatime"]
+              },
+              {
+                "name": "@snapshots",
+                "mountpoint": "/.snapshots",
+                "mount_options": ["compress=zstd", "noatime"]
+              },
+              {
+                "name": "@var",
+                "mountpoint": "/var",
+                "mount_options": ["compress=zstd", "noatime"]
+              },
+              {
+                "name": "@log",
+                "mountpoint": "/var/log",
+                "mount_options": ["compress=zstd", "noatime"]
+              },
+              {
+                "name": "@cache",
+                "mountpoint": "/var/cache",
+                "mount_options": ["compress=zstd", "noatime"]
+              },
+              {
+                "name": "@tmp",
+                "mountpoint": "/var/tmp",
+                "mount_options": ["compress=zstd", "noatime"]
+              }
+            ]
           }
         ],
         "wipe": true
