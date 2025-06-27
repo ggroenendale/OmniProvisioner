@@ -3,8 +3,9 @@
 
 """
 import subprocess
-import pathlib
+from pathlib import Path
 import json
+import glob
 
 from archinstall.lib.installer import Installer
 from archinstall.default_profiles.minimal import MinimalProfile
@@ -19,23 +20,52 @@ from archinstall.lib.disk.encryption_menu import DiskEncryptionMenu
 from archinstall.lib.disk.filesystem import FilesystemHandler
 from archinstall.lib.profile import profile_handler
 
-# ArchConfig builder from json config
-config: ArchConfig = arch_config_handler.config
+"""
+============================================================================================================================
+    Required Configuration Variables
+============================================================================================================================
+"""
 
-# Not sure if the mountpoint here is necessary if its available in the config
-MOUNTPOINT = "/mnt"
-DISK_CONFIG: DiskLayoutConfiguration = select_disk_config()
+ARCHCONFIG_PATH = Path("archconfig.json")
 
-data_store = {}
-DISK_ENC = DiskEncryptionMenu(DISK_CONFIG.device_modifications, data_store).run()
-KERNELS = ["linux"]
 
-# initiate file handler with the disk config and the optional disk encryption config
-fs_handler = FilesystemHandler(DISK_CONFIG, DISK_ENC)
+"""
+============================================================================================================================
+    Installation Functions
+============================================================================================================================
+"""
 
-# Perform all file operations
-# WARNING: this will potentially format the filesystem and delete all data
-fs_handler.perform_filesystem_operations()
+
+def load_arch_config() -> ArchConfig:
+    """
+    This function injects the correct NVME drive id
+    into the json configuration file before loading it and returning
+    it for the rest of the installation.
+    """
+    # Find the first NVMe drive in /dev/disk/by-id
+    nvme_devices = glob.glob("/dev/disk/by-id/nvme*")
+
+    if not nvme_devices:
+        raise RuntimeError("No NVMe drives found in /dev/disk/by-id/")
+    if len(nvme_devices) > 1:
+        print("Warning: multiple NVMe drives found, using the first.")
+
+    selected_nvme = nvme_devices[0]
+
+    # Load the existing Archinstall config
+    with open(ARCHCONFIG_PATH, "r", encoding="utf8") as f:
+        json_config = json.load(f)
+
+    # Inject the NVMe ID into disk_config
+    for mod in json_config.get("disk_config", {}).get("device_modifications", []):
+        mod["device"] = selected_nvme
+
+    # Save the updated config (or return it if you want to pass directly)
+    with open(ARCHCONFIG_PATH, "w", encoding="utf8") as f:
+        json.dump(json_config, f, indent=2)
+
+    print(f"✔ Replaced device path with: {selected_nvme}")
+    return arch_config_handler.config
 
 
 def run_command(command, check=True):
@@ -50,9 +80,12 @@ def run_command(command, check=True):
     subprocess.run(command, shell=True, check=check)
 
 
-def setup_provisioner_files(username):
+def setup_provisioner_files():
     """
-    Clones ansible files into the root working directory 
+    Clones ansible files into the root working directory.
+
+    Also moves the ansible vault_pass file into the OmniProvisioner repository thus
+    unlocking all ansible vault secrets.
 
     """
     # Git repository containing ansible configs
@@ -61,7 +94,32 @@ def setup_provisioner_files(username):
     # Clone the ansible repo
     run_command(f"git clone {ansible_repo}")
     # Move the vault password file into the ansible repository
-    run_command(f"mv .vault_pass.txt OmniProvisioner/")
+    run_command("mv .vault_pass.txt OmniProvisioner/")
+
+
+"""
+============================================================================================================================
+    Begin the Actual Installation
+============================================================================================================================
+"""
+
+# ArchConfig builder from json config
+config: ArchConfig = load_arch_config()
+
+# Not sure if the mountpoint here is necessary if its available in the config
+MOUNTPOINT = "/mnt"
+DISK_CONFIG: DiskLayoutConfiguration = select_disk_config()
+
+data_store = {}
+DISK_ENC = DiskEncryptionMenu(DISK_CONFIG.device_modifications, data_store).run()
+KERNELS = ["linux"]
+
+# Initiate file handler with the disk config and the optional disk encryption config
+fs_handler = FilesystemHandler(DISK_CONFIG, DISK_ENC)
+
+# Perform all file operations
+# WARNING: this will potentially format the filesystem and delete all data
+fs_handler.perform_filesystem_operations()
 
 
 # Start the guided installation
