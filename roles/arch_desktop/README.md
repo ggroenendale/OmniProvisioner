@@ -7,6 +7,13 @@ scripts found in this repository.
 
 ---
 
+### Quickstart Install
+
+1. Boot into the Arch Linux live environment
+2. Mount the Ventoy USB
+3. Run the `copy_files_to_newiso.sh` script
+4. Run the `arch_install.sh`
+
 ### Reasons for using Archinstall
 
 For starters I am moving away from Ubuntu to Arch Linux. I started to experiment with Neovim and found hyprland
@@ -337,8 +344,6 @@ A list of packages I need to install that are particularly necessary as librarie
 - Zot (OCI Container registry)
 - Podman
 - gawk (makes bash config editing scripts work)
-
-
 
 ### Notes from python config file
 
