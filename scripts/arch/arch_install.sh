@@ -59,3 +59,4 @@ arch-chroot /mnt systemctl enable firstboot-ansible.service
 
 echo "First-boot Ansible service enabled in installed system"
 
+echo "Installation complete, reboot and ansible will run the first configuration"
