@@ -64,18 +64,22 @@ def load_arch_config(username: str) -> ArchConfig:
         mod["device"] = selected_nvme
 
     # Update the Games mountpoint with the correct username
-    btrfs_subvolumes = json_config["disk_config"]["device_modifications"][2]["btrfs"]
+    for mod in json_config["disk_config"]["device_modifications"]:
+        if mod.get("fs_type") == "btrfs":
+            btrfs_subvolumes = mod.get("btrfs", [])
+            break
 
-    btrfs_subvolumes.append({
-        "name": "@games",
-        "mountpoint": f"/home/{username}/Games",
-        "mount_options": [
-            "noatime",
-            "ssd",
-            "space_cache=v2",
-            "discard=async"
-        ]
-    })
+    if not any(sv["name"] == "@games" for sv in btrfs_subvolumes):
+        btrfs_subvolumes.append({
+            "name": "@games",
+            "mountpoint": f"/home/{username}/Games",
+            "mount_options": [
+                "noatime",
+                "ssd",
+                "space_cache=v2",
+                "discard=async"
+            ]
+        })
 
     # Save the updated config (or return it if you want to pass directly)
     with open(ARCHCONFIG_PATH, "w", encoding="utf8") as f:
