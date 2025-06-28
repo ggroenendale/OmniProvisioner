@@ -27,7 +27,7 @@ from archinstall.lib.profile import profile_handler
 """
 
 ARCHCONFIG_PATH = Path("archconfig.json")
-
+ARCH_USERNAME = "geoff"
 
 """
 ============================================================================================================================
@@ -36,11 +36,14 @@ ARCHCONFIG_PATH = Path("archconfig.json")
 """
 
 
-def load_arch_config() -> ArchConfig:
+def load_arch_config(username: str) -> ArchConfig:
     """
     This function injects the correct NVME drive id
     into the json configuration file before loading it and returning
     it for the rest of the installation.
+
+    :param username: The username to write into the JSON where necessary.
+    :type username: str
     """
     # Find the first NVMe drive in /dev/disk/by-id
     nvme_devices = glob.glob("/dev/disk/by-id/nvme*")
@@ -60,12 +63,29 @@ def load_arch_config() -> ArchConfig:
     for mod in json_config.get("disk_config", {}).get("device_modifications", []):
         mod["device"] = selected_nvme
 
+    # Update the Games mountpoint with the correct username
+    btrfs_subvolumes = json_config["disk_config"]["device_modifications"][2]["btrfs"]
+
+    btrfs_subvolumes.append({
+        "name": "@games",
+        "mountpoint": f"/home/{username}/Games",
+        "mount_options": [
+            "noatime",
+            "ssd",
+            "space_cache=v2",
+            "discard=async"
+        ]
+    })
+
     # Save the updated config (or return it if you want to pass directly)
     with open(ARCHCONFIG_PATH, "w", encoding="utf8") as f:
         json.dump(json_config, f, indent=2)
 
     print(f"✔ Replaced device path with: {selected_nvme}")
-    return arch_config_handler.config
+
+    # Unclear if this old line actually loads my jsonconfig
+    # return arch_config_handler.config
+    return ArchConfig.model_validate_json(json.dumps(json_config))
 
 
 def run_command(command, check=True):
@@ -80,23 +100,6 @@ def run_command(command, check=True):
     subprocess.run(command, shell=True, check=check)
 
 
-def setup_provisioner_files():
-    """
-    Clones ansible files into the root working directory.
-
-    Also moves the ansible vault_pass file into the OmniProvisioner repository thus
-    unlocking all ansible vault secrets.
-
-    """
-    # Git repository containing ansible configs
-    ansible_repo = "https://github.com/ggroenendale/OmniProvisioner.git"
-
-    # Clone the ansible repo
-    run_command(f"git clone {ansible_repo}")
-    # Move the vault password file into the ansible repository
-    run_command("mv .vault_pass.txt OmniProvisioner/")
-
-
 """
 ============================================================================================================================
     Begin the Actual Installation
@@ -104,11 +107,11 @@ def setup_provisioner_files():
 """
 
 # ArchConfig builder from json config
-config: ArchConfig = load_arch_config()
+config: ArchConfig = load_arch_config(username=ARCH_USERNAME)
 
 # Not sure if the mountpoint here is necessary if its available in the config
 MOUNTPOINT = "/mnt"
-DISK_CONFIG: DiskLayoutConfiguration = select_disk_config()
+DISK_CONFIG: DiskLayoutConfiguration = config.disk_config
 
 data_store = {}
 DISK_ENC = DiskEncryptionMenu(DISK_CONFIG.device_modifications, data_store).run()
