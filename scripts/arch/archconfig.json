@@ -10,21 +10,30 @@
     "device_modifications": [
       {
         "device": "/dev/sda",
+        "type": "gpt",
+        "wipe": true,
         "partitions": [
           {
-            "mountpoint": "/boot",
+            "mountpoint": "/efi",
             "obj_id": "2c3fa2d5-2c79-4fab-86ec-22d0ea1543c0",
-            "flags": ["boot"],
+            "flags": ["esp"],
             "fs_type": "fat32",
             "size": {
               "sector_size": null,
-              "unit": "MiB",
-              "value": 512
+              "unit": "GiB",
+              "value": 2
             },
-            "start": {
+            "type": "primary",
+            "status": "create"
+          },
+          {
+            "mountpoint": "swap",
+            "obj_id": "8f17b3ac-35e6-4f04-881b-3420ab0d82e1",
+            "fs_type": "linux-swap",
+            "size": {
               "sector_size": null,
-              "unit": "MiB",
-              "value": 1
+              "unit": "GiB",
+              "value": 70
             },
             "type": "primary",
             "status": "create"
@@ -38,54 +47,132 @@
               "unit": "Percent",
               "value": 100
             },
-            "mount_options": [],
-            "start": {
-              "sector_size": null,
-              "unit": "MiB",
-              "value": 513
-            },
             "status": "create",
             "type": "primary",
             "btrfs": [
               {
                 "name": "@",
                 "mountpoint": "/",
-                "mount_options": ["compress=zstd", "noatime"]
+                "mount_options": [
+                  "compress=zstd",
+                  "noatime",
+                  "ssd",
+                  "space_cache=v2",
+                  "discard=async"
+                ]
+              },
+              {
+                "name": "@boot",
+                "mountpoint": "/boot",
+                "mount_options": [
+                  "compress=no",
+                  "noatime",
+                  "ssd",
+                  "space_cache=v2",
+                  "discard=async"
+                ]
               },
               {
                 "name": "@home",
                 "mountpoint": "/home",
-                "mount_options": ["compress=zstd", "noatime"]
+                "mount_options": [
+                  "compress=zstd",
+                  "noatime",
+                  "ssd",
+                  "space_cache=v2",
+                  "discard=async"
+                ]
               },
               {
                 "name": "@snapshots",
                 "mountpoint": "/.snapshots",
-                "mount_options": ["compress=zstd", "noatime"]
+                "mount_options": [
+                  "compress=zstd",
+                  "ssd",
+                  "space_cache=v2",
+                  "discard=async"
+                ]
               },
               {
                 "name": "@var",
                 "mountpoint": "/var",
-                "mount_options": ["compress=zstd", "noatime"]
+                "mount_options": [
+                  "compress=zstd",
+                  "noatime",
+                  "ssd",
+                  "space_cache=v2",
+                  "discard=async"
+                ]
               },
               {
                 "name": "@log",
                 "mountpoint": "/var/log",
-                "mount_options": ["compress=zstd", "noatime"]
+                "mount_options": [
+                  "compress=zstd",
+                  "noatime",
+                  "ssd",
+                  "space_cache=v2",
+                  "discard=async"
+                ]
               },
               {
                 "name": "@cache",
                 "mountpoint": "/var/cache",
-                "mount_options": ["compress=zstd", "noatime"]
+                "mount_options": [
+                  "compress=zstd",
+                  "noatime",
+                  "ssd",
+                  "space_cache=v2",
+                  "discard=async"
+                ]
               },
               {
                 "name": "@tmp",
                 "mountpoint": "/var/tmp",
-                "mount_options": ["compress=zstd", "noatime"]
+                "mount_options": [
+                  "compress=zstd",
+                  "noatime",
+                  "ssd",
+                  "space_cache=v2",
+                  "discard=async"
+                ]
+              },
+              {
+                "name": "@opt",
+                "mountpoint": "/opt",
+                "mount_options": [
+                  "compress=zstd",
+                  "noatime",
+                  "ssd",
+                  "space_cache=v2",
+                  "discard=async"
+                ]
+              },
+              {
+                "name": "@docker",
+                "mountpoint": "/var/lib/docker",
+                "mount_options": [
+                  "compress=no",
+                  "noatime",
+                  "ssd",
+                  "space_cache=v2",
+                  "discard=async"
+                ]
+              },
+              {
+                "name": "@pkg",
+                "mountpoint": "/var/cache/pacman/pkg",
+                "mount_options": [
+                  "compress=no",
+                  "noatime",
+                  "ssd",
+                  "space_cache=v2",
+                  "discard=async"
+                ]
               }
             ]
           }
-        ],
-        "wipe": true
+        ]
       }
     ]
   },
@@ -108,10 +195,10 @@
     "nics": [
       {
         "iface": "eno1",
-        "ip": "192.168.1.105/24",
+        "ip": "192.168.1.101/24",
         "dhcp": true,
         "gateway": "192.168.1.1",
-        "dns": ["192.168.1.45", "9.9.9.9"]
+        "dns": ["9.9.9.9", "1.1.1.1"]
       }
     ]
   },
@@ -120,7 +207,7 @@
   "offline": false,
   "packages": ["ansible", "git"],
   "parallel downloads": 0,
-  "script": "guided",
+  "script": "python-script",
   "silent": false,
   "swap": true,
   "timezone": "UTC",
