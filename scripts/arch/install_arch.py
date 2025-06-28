@@ -1,7 +1,5 @@
-"""Installation of Arch Linux using python to configure settings
+"""Installation of Arch Linux using python to configure settings"""
 
-
-"""
 import subprocess
 from pathlib import Path
 import json
@@ -9,8 +7,7 @@ import glob
 
 from archinstall.lib.installer import Installer
 from archinstall.default_profiles.minimal import MinimalProfile
-from archinstall.lib.args import ArchConfig, arch_config_handler
-# from archinstall.lib.configuration import ConfigurationOutput
+from archinstall.lib.args import ArchConfig
 from archinstall.lib.models import User, Bootloader
 from archinstall.lib.models.device_model import DiskLayoutConfiguration
 from archinstall.lib.models.network_configuration import NetworkConfiguration
@@ -67,19 +64,20 @@ def load_arch_config(username: str) -> ArchConfig:
     for mod in json_config["disk_config"]["device_modifications"]:
         if mod.get("fs_type") == "btrfs":
             btrfs_subvolumes = mod.get("btrfs", [])
+            if not any(sv["name"] == "@games" for sv in btrfs_subvolumes):
+                btrfs_subvolumes.append(
+                    {
+                        "name": "@games",
+                        "mountpoint": f"/home/{username}/Games",
+                        "mount_options": [
+                            "noatime",
+                            "ssd",
+                            "space_cache=v2",
+                            "discard=async",
+                        ],
+                    }
+                )
             break
-
-    if not any(sv["name"] == "@games" for sv in btrfs_subvolumes):
-        btrfs_subvolumes.append({
-            "name": "@games",
-            "mountpoint": f"/home/{username}/Games",
-            "mount_options": [
-                "noatime",
-                "ssd",
-                "space_cache=v2",
-                "discard=async"
-            ]
-        })
 
     # Save the updated config (or return it if you want to pass directly)
     with open(ARCHCONFIG_PATH, "w", encoding="utf8") as f:
@@ -118,8 +116,11 @@ MOUNTPOINT = "/mnt"
 DISK_CONFIG: DiskLayoutConfiguration = config.disk_config
 
 data_store = {}
-DISK_ENC = DiskEncryptionMenu(DISK_CONFIG.device_modifications, data_store).run()
-KERNELS = ["linux"]
+# This DiskEncryptionMenu is an interactive Menu, I removed it and replaced it with None
+# I may add Encryption later
+# DISK_ENC = DiskEncryptionMenu(DISK_CONFIG.device_modifications, data_store).run()
+DISK_ENC = None
+KERNELS = config.kernels
 
 # Initiate file handler with the disk config and the optional disk encryption config
 fs_handler = FilesystemHandler(DISK_CONFIG, DISK_ENC)
@@ -131,10 +132,8 @@ fs_handler.perform_filesystem_operations()
 
 # Start the guided installation
 with Installer(
-        target=MOUNTPOINT,
-        disk_config=DISK_CONFIG,
-        disk_encryption=DISK_ENC,
-        kernels=KERNELS) as installation:
+    target=MOUNTPOINT, disk_config=DISK_CONFIG, kernels=KERNELS
+) as installation:
     installation.mount_ordered_layout()
 
     if installation.minimal_installation():
@@ -148,11 +147,9 @@ with Installer(
         network_config: NetworkConfiguration | None = config.network_config
 
         if network_config:
-            network_config.install_network_config(
-                installation,
-                config.profile_config
-            )
+            network_config.install_network_config(installation, config.profile_config)
 
         profile_config = ProfileConfiguration(MinimalProfile())
         profile_handler.install_profile_config(installation, profile_config)
 
+    installation.add_additional_packages(config.packages)
