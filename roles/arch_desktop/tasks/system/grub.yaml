@@ -11,7 +11,7 @@
         update_cache: yes
 
     - name: Install Grub to EFI partition
-      command: grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB
+      command: grub-install --target=x86_64-efi --efi-directory=/efi --bootloader-id=GRUB
 
     - name: Generate GRUB config
       command: grub-mkconfig -o /boot/grub/grub.cfg
