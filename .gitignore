@@ -3,3 +3,9 @@
 
 # Ignore vault_pass.txt file
 .vault_pass.txt
+
+# Ignore python virtual environment for script development
+.venv
+
+# Ignore archinstall module
+archinstall-*
