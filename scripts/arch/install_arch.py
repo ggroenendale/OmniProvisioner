@@ -44,7 +44,7 @@ from archinstall.lib.disk.filesystem import FilesystemHandler
 """
 
 ARCHCONFIG_PATH = Path("archconfig.json")
-ARCH_HOSTNAME = ""
+ARCH_HOSTNAME = "arch_desktop"
 ARCH_USERNAME = "geoff"
 ARCH_PASSWORD = ""
 ENCR_PASSWORD = ""
