@@ -171,7 +171,7 @@ fs_handler = FilesystemHandler(disk_config=disk_config)
 
 # Perform all file operations
 # WARNING: this will potentially format the filesystem and delete all data
-fs_handler.perform_filesystem_operations()
+fs_handler.perform_filesystem_operations(show_countdown=False)
 
 
 # Start the guided installation
