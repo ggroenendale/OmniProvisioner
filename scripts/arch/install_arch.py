@@ -180,20 +180,39 @@ with Installer(
 ) as installation:
     installation.mount_ordered_layout()
 
-    if installation.minimal_installation():
-        # Set the hostname for the machine from the config file
-        installation.set_hostname(hostname=config.hostname)
+    # Set the hostname for the machine and the locale
+    installation.minimal_installation(
+        hostname=ARCH_HOSTNAME,
+        locale_config=LocaleConfiguration(
+            kb_layout="us", sys_lang="en_US", sys_enc="UTF-8"
+        ),
+    )
 
-        # Add grub as bootloader
-        installation.add_bootloader(Bootloader.Grub)
+    # Add grub as bootloader
+    installation.add_bootloader(Bootloader.Grub)
 
-        # Define the network setup which should pull from the config file
-        network_config: NetworkConfiguration | None = config.network_config
+    # Make a minimup profile to install the network config to
+    profile_config = ProfileConfiguration(MinimalProfile())
+    profile_handler.install_profile_config(installation, profile_config)
 
-        if network_config:
-            network_config.install_network_config(installation, config.profile_config)
+    # Define the network setup which should pull from the config file
+    network_config: NetworkConfiguration = NetworkConfiguration(
+        type=NicType.MANUAL,
+        nics=[
+            Nic(
+                iface="eno1",
+                ip="192.168.1.101",
+                dhcp=True,
+                gateway="192.168.1.1",
+                dns=["9.9.9.9", "1.1.1.1"],
+            )
+        ],
+    )
 
-        profile_config = ProfileConfiguration(MinimalProfile())
-        profile_handler.install_profile_config(installation, profile_config)
+    if network_config:
+        network_config.install_network_config(installation, profile_config)
 
-    installation.add_additional_packages(config.packages)
+
+    installation.add_additional_packages(["nano", "ansible", "git", "wget"])
+
+    installation.set_timezone(zone="America/Vancouver")
