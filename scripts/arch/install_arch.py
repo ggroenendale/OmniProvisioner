@@ -176,7 +176,7 @@ fs_handler.perform_filesystem_operations(show_countdown=False)
 
 # Start the guided installation
 with Installer(
-    target=MOUNTPOINT, disk_config=DISK_CONFIG, kernels=KERNELS
+    target=Path("/mnt"), disk_config=disk_config, kernels=["linux"]
 ) as installation:
     installation.mount_ordered_layout()
 
