@@ -91,6 +91,75 @@ device = device_handler.get_device(device_path)
 
 # Create a device modification object
 device_modification = DeviceModification(device, wipe=True)
+
+# create a new boot partition
+boot_partition = PartitionModification(
+    status=ModificationStatus.Create,
+    type=PartitionType.Primary,
+    length=Size(2, Unit.GiB, device.device_info.sector_size),
+    mountpoint=Path("/efi"),
+    fs_type=FilesystemType.Fat32,
+    flags=[PartitionFlag.ESP],
+)
+device_modification.add_partition(boot_partition)
+
+swap_partition = PartitionModification(
+    status=ModificationStatus.Create,
+    type=PartitionType.Primary,
+    length=Size(70, Unit.GiB, device.device_infog.sector_size),
+    mountpoint=None,
+    fs_type=FilesystemType.LinuxSwap,
+    mount_options=[],
+    flags=[PartitionFlag.SWAP],
+)
+device_modification.add_partition(swap_partition)
+
+# create a root partition
+
+root_length = (
+    device.device_info.total_size - boot_partition.length - swap_partition.length
+)
+
+root_partition = PartitionModification(
+    status=ModificationStatus.Create,
+    type=PartitionType.Primary,
+    length=root_length,
+    mountpoint=None,
+    fs_type=FilesystemType.Btrfs,
+    mount_options=[],
+    btrfs_subvols=[
+        SubvolumeModification(name="@", mountpoint="/"),
+        SubvolumeModification(name="@boot", mountpoint="/boot"),
+        SubvolumeModification(name="@home", mountpoint="/home"),
+        SubvolumeModification(name="@snapshots", mountpoint=".snapshots"),
+        SubvolumeModification(name="@var", mountpoint="/var"),
+        SubvolumeModification(name="@log", mountpoint="/var/log"),
+        SubvolumeModification(name="@cache", mountpoint="/var/cache"),
+        SubvolumeModification(name="@tmp", mountpoint="/var/tmp"),
+        SubvolumeModification(name="@opt", mountpoint="/opt"),
+        SubvolumeModification(name="@docker", mountpoint="/var/lib/docker"),
+        SubvolumeModification(name="@games", mountpoint=f"/home/{ARCH_USERNAME}/Games"),
+        SubvolumeModification(name="@pkg", mountpoint="/var/cache/pacman/pkg"),
+    ],
+)
+device_modification.add_partition(root_partition)
+
+# Define the Disk Configuration here using the combined modifications
+disk_config = DiskLayoutConfiguration(
+    config_type=DiskLayoutType.Default,
+    device_modifications=[device_modification],
+)
+
+# Disk encryption configuration
+disk_encryption = DiskEncryption(
+    encryption_password=Password(plaintext=ARCH_PASSWORD),
+    encryption_type=EncryptionType.Luks,
+    partitions=[root_partition],
+    hsm_device=None,
+)
+
+disk_config.disk_encryption = disk_encryption
+
 # Initiate file handler with the disk config and the optional disk encryption config
 fs_handler = FilesystemHandler(DISK_CONFIG, DISK_ENC)
 
