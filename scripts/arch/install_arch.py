@@ -56,63 +56,6 @@ ENCR_PASSWORD = ""
 """
 
 
-def load_arch_config(username: str) -> ArchConfig:
-    """
-    This function injects the correct NVME drive id
-    into the json configuration file before loading it and returning
-    it for the rest of the installation.
-
-    :param username: The username to write into the JSON where necessary.
-    :type username: str
-    """
-    # Find the first NVMe drive in /dev/disk/by-id
-    nvme_devices = glob.glob("/dev/disk/by-id/nvme*")
-
-    if not nvme_devices:
-        raise RuntimeError("No NVMe drives found in /dev/disk/by-id/")
-    if len(nvme_devices) > 1:
-        print("Warning: multiple NVMe drives found, using the first.")
-
-    selected_nvme = nvme_devices[0]
-
-    # Load the existing Archinstall config
-    with open(ARCHCONFIG_PATH, "r", encoding="utf8") as f:
-        json_config = json.load(f)
-
-    # Inject the NVMe ID into disk_config
-    for mod in json_config.get("disk_config", {}).get("device_modifications", []):
-        mod["device"] = selected_nvme
-
-    # Update the Games mountpoint with the correct username
-    for mod in json_config["disk_config"]["device_modifications"]:
-        if mod.get("fs_type") == "btrfs":
-            btrfs_subvolumes = mod.get("btrfs", [])
-            if not any(sv["name"] == "@games" for sv in btrfs_subvolumes):
-                btrfs_subvolumes.append(
-                    {
-                        "name": "@games",
-                        "mountpoint": f"/home/{username}/Games",
-                        "mount_options": [
-                            "noatime",
-                            "ssd",
-                            "space_cache=v2",
-                            "discard=async",
-                        ],
-                    }
-                )
-            break
-
-    # Save the updated config (or return it if you want to pass directly)
-    with open(ARCHCONFIG_PATH, "w", encoding="utf8") as f:
-        json.dump(json_config, f, indent=2)
-
-    print(f"✔ Replaced device path with: {selected_nvme}")
-
-    # Unclear if this old line actually loads my jsonconfig
-    # return arch_config_handler.config
-    return ArchConfig.model_validate_json(json.dumps(json_config))
-
-
 def run_command(command, check=True):
     """
     Helper function to run shell commands
