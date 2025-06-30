@@ -160,8 +160,14 @@ disk_encryption = DiskEncryption(
 
 disk_config.disk_encryption = disk_encryption
 
+"""
+============================================================================================================================
+    Begin the Actual Installation
+============================================================================================================================
+"""
+
 # Initiate file handler with the disk config and the optional disk encryption config
-fs_handler = FilesystemHandler(DISK_CONFIG, DISK_ENC)
+fs_handler = FilesystemHandler(disk_config=disk_config)
 
 # Perform all file operations
 # WARNING: this will potentially format the filesystem and delete all data
