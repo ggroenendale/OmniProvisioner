@@ -131,20 +131,23 @@ def run_command(command, check=True):
 ============================================================================================================================
 """
 
-# ArchConfig builder from json config
-config: ArchConfig = load_arch_config(username=ARCH_USERNAME)
+# Find the first NVMe drive in /dev/disk/by-id
+nvme_devices = glob.glob("/dev/disk/by-id/nvme*")
 
-# Not sure if the mountpoint here is necessary if its available in the config
-MOUNTPOINT = "/mnt"
-DISK_CONFIG: DiskLayoutConfiguration = config.disk_config
+if not nvme_devices:
+    raise RuntimeError("No NVMe drives found in /dev/disk/by-id/")
+if len(nvme_devices) > 1:
+    print("Warning: multiple NVMe drives found, using the first.")
 
-data_store = {}
-# This DiskEncryptionMenu is an interactive Menu, I removed it and replaced it with None
-# I may add Encryption later
-# DISK_ENC = DiskEncryptionMenu(DISK_CONFIG.device_modifications, data_store).run()
-DISK_ENC = None
-KERNELS = config.kernels
+selected_nvme = nvme_devices[0]
 
+device_path = Path(selected_nvme)
+
+# get the physical disk device
+device = device_handler.get_device(device_path)
+
+# Create a device modification object
+device_modification = DeviceModification(device, wipe=True)
 # Initiate file handler with the disk config and the optional disk encryption config
 fs_handler = FilesystemHandler(DISK_CONFIG, DISK_ENC)
 
