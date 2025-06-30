@@ -8,14 +8,34 @@ import glob
 from archinstall.lib.installer import Installer
 from archinstall.default_profiles.minimal import MinimalProfile
 from archinstall.lib.args import ArchConfig
-from archinstall.lib.models import User, Bootloader
-from archinstall.lib.models.device_model import DiskLayoutConfiguration
-from archinstall.lib.models.network_configuration import NetworkConfiguration
+from archinstall.lib.models import Bootloader
+from archinstall.lib.models.device_model import (
+    DeviceModification,
+    DiskEncryption,
+    DiskLayoutConfiguration,
+    DiskLayoutType,
+    EncryptionType,
+    FilesystemType,
+    PartitionModification,
+    PartitionType,
+    PartitionFlag,
+    Password,
+    ModificationStatus,
+    Size,
+    Unit,
+    SubvolumeModification,
+)
+from archinstall.lib.disk.device_handler import device_handler
+from archinstall.lib.models.network_configuration import (
+    NetworkConfiguration,
+    Nic,
+    NicType,
+)
 from archinstall.lib.models.profile_model import ProfileConfiguration
-from archinstall.lib.interactions.disk_conf import select_disk_config
-from archinstall.lib.disk.encryption_menu import DiskEncryptionMenu
+from archinstall.lib.models.locale import LocaleConfiguration
+from archinstall.lib.models.mirrors import MirrorConfiguration, MirrorRegion
+from archinstall.lib.profile.profiles_handler import profile_handler
 from archinstall.lib.disk.filesystem import FilesystemHandler
-from archinstall.lib.profile import profile_handler
 
 """
 ============================================================================================================================
@@ -24,7 +44,10 @@ from archinstall.lib.profile import profile_handler
 """
 
 ARCHCONFIG_PATH = Path("archconfig.json")
+ARCH_HOSTNAME = ""
 ARCH_USERNAME = "geoff"
+ARCH_PASSWORD = ""
+ENCR_PASSWORD = ""
 
 """
 ============================================================================================================================
@@ -104,7 +127,7 @@ def run_command(command, check=True):
 
 """
 ============================================================================================================================
-    Begin the Actual Installation
+    Partition Table Definitions
 ============================================================================================================================
 """
 
