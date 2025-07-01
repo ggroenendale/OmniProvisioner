@@ -2,12 +2,10 @@
 
 import subprocess
 from pathlib import Path
-import json
 import glob
 
 from archinstall.lib.installer import Installer
 from archinstall.default_profiles.minimal import MinimalProfile
-from archinstall.lib.args import ArchConfig
 from archinstall.lib.models import Bootloader
 from archinstall.lib.models.device_model import (
     DeviceModification,
@@ -46,8 +44,11 @@ from archinstall.lib.disk.filesystem import FilesystemHandler
 ARCHCONFIG_PATH = Path("archconfig.json")
 ARCH_HOSTNAME = "arch_desktop"
 ARCH_USERNAME = "geoff"
-ARCH_PASSWORD = ""
-ENCR_PASSWORD = ""
+with open("password_user.txt", "r", encoding="utf-8") as pass_file:
+    ARCH_PASSWORD = pass_file.read()
+
+with open("password_encr.txt", "r", encoding="utf-8") as encr_file:
+    ENCR_PASSWORD = encr_file.read()
 
 """
 ============================================================================================================================
