@@ -39,10 +39,22 @@ else
     exit 1
 fi
 
+# Ensure that the live environment has the right version of archinstall ready.
+
+if pacman -Qi archinstall 2>/dev/null | grep -E "^Version\s*:\s*3\.0\.8" >/dev/null; then
+  echo "archinstall is version 3.0.8 (or 3.0.8-*)"
+else
+  echo "archinstall is NOT 3.0.8"
+  
+fi
+pacman -Qi archinstall
+
 # Copy the install script, python config, json config, and vault_pass to the airootfs/root/ folder
 cp -r "$VENTOY_MOUNT/scripts/arch/arch_install.sh" "$PROFILE_DIR/airootfs/root/"
 cp -r "$VENTOY_MOUNT/scripts/arch/install_arch.py" "$PROFILE_DIR/airootfs/root/"
 cp -r "$VENTOY_MOUNT/scripts/arch/archconfig.json" "$PROFILE_DIR/airootfs/root/"
+cp -r "$VENTOY_MOUNT/scripts/arch/password_encr.txt" "$PROFILE_DIR/airootfs/root/"
+cp -r "$VENTOY_MOUNT/scripts/arch/password_user.txt" "$PROFILE_DIR/airootfs/root/"
 cp -r "$VENTOY_MOUNT/.vault_pass.txt" "$PROFILE_DIR/airootfs/root/"
 
 # Create the autoinstall service for the complete automated setup
