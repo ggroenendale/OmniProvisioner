@@ -181,6 +181,10 @@ cd archinstall
 pip install .
 ```
 
+### Checking the current versions of Arch Packages
+
+--
+
 ## Overview of Whats Included
 
 ---
