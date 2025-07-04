@@ -9,7 +9,7 @@ Provisioner as in this repository will be used to provision and configure all of
 * [Introduction](#introduction)
 * [Prerequisites](#prerequisites)
   * [Ventoy USB](#ventoy-usb)
-    * [Encrypt USB](#encrypt-usb)
+    * [Handling Secret information on the USB Drive](#handling-secret-information-on-the-usb-drive)
     * [Install Ventoy](#install-ventoy)
 * [Debian Network Server](#debian-network-server)
   * [Debian Install Overview](#debian-install-overview)
