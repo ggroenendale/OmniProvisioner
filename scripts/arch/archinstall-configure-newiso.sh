@@ -53,9 +53,14 @@ pacman -Qi archinstall
 cp -r "$VENTOY_MOUNT/scripts/arch/arch_install.sh" "$PROFILE_DIR/airootfs/root/"
 cp -r "$VENTOY_MOUNT/scripts/arch/install_arch.py" "$PROFILE_DIR/airootfs/root/"
 cp -r "$VENTOY_MOUNT/scripts/arch/archconfig.json" "$PROFILE_DIR/airootfs/root/"
-cp -r "$VENTOY_MOUNT/scripts/arch/password_encr.txt" "$PROFILE_DIR/airootfs/root/"
-cp -r "$VENTOY_MOUNT/scripts/arch/password_user.txt" "$PROFILE_DIR/airootfs/root/"
-cp -r "$VENTOY_MOUNT/.vault_pass.txt" "$PROFILE_DIR/airootfs/root/"
+
+# Grab secrets from the local server
+curl -k -o "$PROFILE_DIR/airootfs/root/password_encr.txt" http://192.168.1.12:8443/password_encr.txt
+# cp -r "$VENTOY_MOUNT/scripts/arch/password_encr.txt" "$PROFILE_DIR/airootfs/root/"
+curl -k -o "$PROFILE_DIR/airootfs/root/password_user.txt" http://192.168.1.12:8443/password_user.txt
+# cp -r "$VENTOY_MOUNT/scripts/arch/password_user.txt" "$PROFILE_DIR/airootfs/root/"
+curl -k -o "$PROFILE_DIR/airootfs/root/.vault_pass.txt" http://192.168.1.12:8443/.vault_pass.txt
+# cp -r "$VENTOY_MOUNT/.vault_pass.txt" "$PROFILE_DIR/airootfs/root/"
 
 # Create the autoinstall service for the complete automated setup
 
