@@ -58,7 +58,19 @@ Next we need our usb drive. I am using a 256GB drive for this. In order to make 
 I used the `lsblk` command and found my usb device at `/dev/sdc`. Another useful command is `sudo fdisk -l` to list
 out all disks and partitions on your device.
 
-#### Encrypt USB
+#### Handling Secret information on the USB Drive
+
+Throughout the various installations it will occur that I need to have password and secrets information available in order to create user profiles automatically or unlock my ansible vault. Therefore we need to manage a couple ways of keeping that information secret.
+
+I am going to rely on a hardware encrypted USB drive in the future with a minimum of 256GB, but I think my ideal thumbdrive is the [iStorage DataShur SD](https://www.newegg.com/istorage-no-memory-usb-3-2-gen-1-blue/p/0BD-011J-00025) that allows you to take a MicroSD card and plug it into this device which handles all of the passcode encryption and then remove the SD card to use a different one.
+
+We could as an alternative encrypt the partition that contains all of the isos, scripts, and secret information. This could be a good solution until I can afford a hardware encrypted stick.
+
+As another alternative, while I take the time to repartition the USB drive down the road or wait to afford a more expensive hardware encrypted drive, I could just serve the password and secret information on my local network over that is behind my router over https. This does present some risks however as long as I am just serving these files during the installation of a new OS we should be fine.
+
+```bash
+python3 -m http.server 8443 --bind 0.0.0.0 --directory .
+```
 
 #### Install Ventoy
 
