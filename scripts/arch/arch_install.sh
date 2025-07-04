@@ -45,7 +45,7 @@ cat <<EOF > /mnt/root/run-ansible.sh
 set -e
 
 echo "Running first-boot Ansible provisioning"
-ansible-playbook -i localhost, /root/OmniProvisioner/playbooks/desktop.yaml
+ansible-playbook -i localhost, /root/OmniProvisioner/playbooks/arch_desktop.yaml
 
 echo "Provisioning complete. Disabling service."
 systemctl disable firstboot-ansible.service
