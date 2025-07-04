@@ -4,6 +4,27 @@ Omni as in all devices
 
 Provisioner as in this repository will be used to provision and configure all of my devices.
 
+<!-- mtoc-start -->
+
+* [Introduction](#introduction)
+* [Prerequisites](#prerequisites)
+  * [Ventoy USB](#ventoy-usb)
+    * [Encrypt USB](#encrypt-usb)
+    * [Install Ventoy](#install-ventoy)
+* [Debian Network Server](#debian-network-server)
+  * [Debian Install Overview](#debian-install-overview)
+  * [Run Debian Install](#run-debian-install)
+* [Arch Linux Desktop](#arch-linux-desktop)
+  * [Arch Install Overview](#arch-install-overview)
+  * [Run Arch Install](#run-arch-install)
+* [Raspberry PI Device](#raspberry-pi-device)
+  * [Raspberry Pi Overview](#raspberry-pi-overview)
+  * [Run Raspberry Pi Install](#run-raspberry-pi-install)
+* [Mobile Device](#mobile-device)
+  * [Mobile Device Overview](#mobile-device-overview)
+
+<!-- mtoc-end -->
+
 ## Introduction
 
 The purpose of this repository is to install, setup, and configure all of the devices on my network. This is primarily handled with Ansible playbooks with the addition of a handful of terminal scripts and other utilities when ansible
