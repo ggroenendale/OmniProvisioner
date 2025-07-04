@@ -12,3 +12,6 @@ archinstall-*
 
 # Ignore any password files
 *password*
+
+# Ignore any unencrypted files so they are not publicy seen.
+*_uncry.yaml
