@@ -58,6 +58,10 @@ Next we need our usb drive. I am using a 256GB drive for this. In order to make 
 I used the `lsblk` command and found my usb device at `/dev/sdc`. Another useful command is `sudo fdisk -l` to list
 out all disks and partitions on your device.
 
+#### Encrypt USB
+
+#### Install Ventoy
+
 Now we can install ventoy onto the `/dev/sdc` usb drive.
 
 ```bash
