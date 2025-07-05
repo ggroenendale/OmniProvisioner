@@ -1,5 +1,8 @@
 - name: Arch Configuration | Install Base Configs
   block:
+    # Add the user
+    - import_tasks: user/user.yaml
+
     # Run the base install files
     - import_tasks: system/base.yaml
     - import_tasks: system/ssh.yaml
