@@ -44,7 +44,7 @@ if pacman -Qi archinstall 2>/dev/null | grep -E "^Version\s*:\s*3\.0\.8" >/dev/n
   echo "archinstall is version 3.0.8 (or 3.0.8-*)"
 else
   echo "archinstall is NOT 3.0.8"
-  
+  pacman -Sy archinstall
 fi
 pacman -Qi archinstall
 
