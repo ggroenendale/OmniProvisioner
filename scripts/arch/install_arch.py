@@ -5,6 +5,7 @@ from pathlib import Path
 import glob
 
 from archinstall.lib.installer import Installer
+from archinstall.lib.general import SysCommand
 from archinstall.default_profiles.minimal import MinimalProfile
 from archinstall.lib.models import Bootloader
 from archinstall.lib.models.device_model import (
@@ -83,12 +84,15 @@ if not nvme_devices:
 if len(nvme_devices) > 1:
     print("Warning: multiple NVMe drives found, using the first.")
 
-selected_nvme = "dev/nvme0n1"
+selected_nvme = nvme_devices[0]
 
-device_path = Path(selected_nvme)
+device_path = Path("/dev/nvme0n1")
 
 # get the physical disk device
 device = device_handler.get_device(device_path)
+print(device)
+if not device:
+    RuntimeError("Couldnt parse device")
 
 # Create a device modification object
 device_modification = DeviceModification(device, wipe=True)
@@ -120,7 +124,7 @@ device_modification.add_partition(swap_partition)
 # create a root partition
 
 root_length = (
-    device.device_info.total_size - boot_partition.length - swap_partition.length - Size(1, Unit.MiB, device.device_info.sector_size)
+    device.device_info.total_size - boot_partition.length - swap_partition.length - Size(100, Unit.MiB, device.device_info.sector_size)
 )
 
 root_partition = PartitionModification(
@@ -155,14 +159,14 @@ disk_config = DiskLayoutConfiguration(
 )
 
 # Disk encryption configuration
-disk_encryption = DiskEncryption(
-    encryption_password=Password(plaintext=ARCH_PASSWORD),
-    encryption_type=EncryptionType.Luks,
-    partitions=[root_partition],
-    hsm_device=None,
-)
+#disk_encryption = DiskEncryption(
+#    encryption_password=Password(plaintext=ENCR_PASSWORD),
+#    encryption_type=EncryptionType.Luks,
+#    partitions=[root_partition],
+#    hsm_device=None,
+#)
 
-disk_config.disk_encryption = disk_encryption
+#disk_config.disk_encryption = disk_encryption
 
 """
 ============================================================================================================================
@@ -177,9 +181,13 @@ fs_handler = FilesystemHandler(disk_config=disk_config)
 # WARNING: this will potentially format the filesystem and delete all data
 fs_handler.perform_filesystem_operations(show_countdown=False)
 
+
 # Start the guided installation
 with Installer(
-    target=Path("/mnt"), disk_config=disk_config, kernels=["linux"]
+    target=Path("/mnt"), 
+    disk_config=disk_config, 
+    base_packages=['base', 'base-devel', 'linux-firmware', 'linux', 'linux-lts', 'linux-zen', 'linux-hardened', 'grub', 'efibootmgr'],
+    kernels=["linux"]
 ) as installation:
     installation.mount_ordered_layout()
 
@@ -192,7 +200,25 @@ with Installer(
     )
 
     # Add grub as bootloader
-    installation.add_bootloader(Bootloader.Grub)
+    #installation.add_bootloader(Bootloader.Grub)
+
+    SysCommand(f"arch-chroot {installation.target} /bin/bash -c " + '"echo ' + "'GRUB_ENABLE_CRYPTODISK=y'" + ' >> /etc/default/grub"')
+
+    command = [
+        'arch-chroot',
+        installation.target,
+        'grub-install',
+        '--debug',
+        '--target=x86_64-efi',
+        '--efi-directory=/efi',
+        '--boot-directory=/boot',
+        '--bootloader-id=GRUB',
+        '--removable'
+    ]
+    
+    SysCommand(command, peek_output=True)
+
+    SysCommand(f"arch-chroot {installation.target} grub-mkconfig -o /boot/grub/grub.cfg")
 
     # Make a minimup profile to install the network config to
     profile_config = ProfileConfiguration(MinimalProfile())
@@ -306,7 +332,9 @@ with Installer(
             ),
         ]
     )
-
+    
+    
+    print("Setting up Mirrors...")
     installation.set_mirrors(mirror_config=mirror_config)
 
     installation.add_additional_packages(["nano", "ansible", "git", "wget"])
