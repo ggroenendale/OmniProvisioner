@@ -1,6 +1,3 @@
-# Copy the vault pass text file to Ventoy
-cp -r .vault_pass.txt /media/geoff/Ventoy/
-
 # Copy Arch Linux scripts to Ventoy
 cp -r scripts/arch/arch_install.sh /media/geoff/Ventoy/scripts/arch/arch_install.sh
 cp -r scripts/arch/archinstall-configure-newiso.sh /media/geoff/Ventoy/scripts/arch/archinstall-configure-newiso.sh
