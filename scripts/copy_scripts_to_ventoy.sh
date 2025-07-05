@@ -1,6 +1,7 @@
 # Copy Arch Linux scripts to Ventoy
 cp -r scripts/arch/arch_install.sh /media/geoff/Ventoy/scripts/arch/arch_install.sh
 cp -r scripts/arch/archinstall-configure-newiso.sh /media/geoff/Ventoy/scripts/arch/archinstall-configure-newiso.sh
+cp -r scripts/arch/install_arch.py /media/geoff/Ventoy/scripts/arch/install_arch.py
 
 # Copy Debian scripts to Ventoy
 cp -r scripts/debian/debian_install.sh /media/geoff/Ventoy/scripts/debian/debian_install.sh
