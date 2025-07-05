@@ -22,6 +22,8 @@ Provisioner as in this repository will be used to provision and configure all of
   * [Run Raspberry Pi Install](#run-raspberry-pi-install)
 * [Mobile Device](#mobile-device)
   * [Mobile Device Overview](#mobile-device-overview)
+* [Network Notes](#network-notes)
+  * [Overview](#overview)
 
 <!-- mtoc-end -->
 
@@ -187,3 +189,16 @@ Phone features that I actually need regardless of solution:
 - Camera: The actual camera quality doesn't matter much, but whatever OS I choose needs to be able to use the camera
 - GPS: Non-negotiable, I need maps
 - NFC: not absolutely critical but would be nice to have, I'm not even sure I could use this for payments with open source software
+
+## Network Notes
+
+### Overview
+
+Just some notes about the network and my plan for it. For starters the IP address plan is ideally based on a 10.0.0.0 subnet if I can control that.
+
+- 10.0.0.1: Router, DNS, DHCP
+- 10.0.0.2-9: Unused. Could make separate devices or VM's for DHCP and DNS
+- 10.0.0.11-49: Servers, NAS, webservers
+- 10.0.0.51-99: Mobile Devices, cell phones, tablets
+- 10.0.0.101-199: IOT devices, RaspberryPi, Cameras
+- 10.0.0.201-250: Desktop, Laptop, Workstations
