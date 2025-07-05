@@ -83,7 +83,7 @@ if not nvme_devices:
 if len(nvme_devices) > 1:
     print("Warning: multiple NVMe drives found, using the first.")
 
-selected_nvme = nvme_devices[0]
+selected_nvme = "dev/nvme0n1"
 
 device_path = Path(selected_nvme)
 
@@ -97,6 +97,7 @@ device_modification = DeviceModification(device, wipe=True)
 boot_partition = PartitionModification(
     status=ModificationStatus.Create,
     type=PartitionType.Primary,
+    start=Size(1, Unit.MiB, device.device_info.sector_size),
     length=Size(2, Unit.GiB, device.device_info.sector_size),
     mountpoint=Path("/efi"),
     fs_type=FilesystemType.Fat32,
@@ -107,7 +108,8 @@ device_modification.add_partition(boot_partition)
 swap_partition = PartitionModification(
     status=ModificationStatus.Create,
     type=PartitionType.Primary,
-    length=Size(70, Unit.GiB, device.device_infog.sector_size),
+    start=Size(1, Unit.MiB, device.device_info.sector_size) + boot_partition.length,
+    length=Size(70, Unit.GiB, device.device_info.sector_size),
     mountpoint=None,
     fs_type=FilesystemType.LinuxSwap,
     mount_options=[],
@@ -118,29 +120,30 @@ device_modification.add_partition(swap_partition)
 # create a root partition
 
 root_length = (
-    device.device_info.total_size - boot_partition.length - swap_partition.length
+    device.device_info.total_size - boot_partition.length - swap_partition.length - Size(1, Unit.MiB, device.device_info.sector_size)
 )
 
 root_partition = PartitionModification(
     status=ModificationStatus.Create,
     type=PartitionType.Primary,
+    start=Size(1, Unit.MiB, device.device_info.sector_size) + boot_partition.length + swap_partition.length,
     length=root_length,
     mountpoint=None,
     fs_type=FilesystemType.Btrfs,
     mount_options=[],
     btrfs_subvols=[
-        SubvolumeModification(name="@", mountpoint="/"),
-        SubvolumeModification(name="@boot", mountpoint="/boot"),
-        SubvolumeModification(name="@home", mountpoint="/home"),
-        SubvolumeModification(name="@snapshots", mountpoint=".snapshots"),
-        SubvolumeModification(name="@var", mountpoint="/var"),
-        SubvolumeModification(name="@log", mountpoint="/var/log"),
-        SubvolumeModification(name="@cache", mountpoint="/var/cache"),
-        SubvolumeModification(name="@tmp", mountpoint="/var/tmp"),
-        SubvolumeModification(name="@opt", mountpoint="/opt"),
-        SubvolumeModification(name="@docker", mountpoint="/var/lib/docker"),
-        SubvolumeModification(name="@games", mountpoint=f"/home/{ARCH_USERNAME}/Games"),
-        SubvolumeModification(name="@pkg", mountpoint="/var/cache/pacman/pkg"),
+        SubvolumeModification(name="@", mountpoint=Path("/")),
+        SubvolumeModification(name="@boot", mountpoint=Path("/boot")),
+        SubvolumeModification(name="@home", mountpoint=Path("/home")),
+        SubvolumeModification(name="@snapshots", mountpoint=Path(".snapshots")),
+        SubvolumeModification(name="@var", mountpoint=Path("/var")),
+        SubvolumeModification(name="@log", mountpoint=Path("/var/log")),
+        SubvolumeModification(name="@cache", mountpoint=Path("/var/cache")),
+        SubvolumeModification(name="@tmp", mountpoint=Path("/var/tmp")),
+        SubvolumeModification(name="@opt", mountpoint=Path("/opt")),
+        SubvolumeModification(name="@docker", mountpoint=Path("/var/lib/docker")),
+        SubvolumeModification(name="@games", mountpoint=Path(f"/home/{ARCH_USERNAME}/Games")),
+        SubvolumeModification(name="@pkg", mountpoint=Path("/var/cache/pacman/pkg")),
     ],
 )
 device_modification.add_partition(root_partition)
@@ -173,7 +176,6 @@ fs_handler = FilesystemHandler(disk_config=disk_config)
 # Perform all file operations
 # WARNING: this will potentially format the filesystem and delete all data
 fs_handler.perform_filesystem_operations(show_countdown=False)
-
 
 # Start the guided installation
 with Installer(
