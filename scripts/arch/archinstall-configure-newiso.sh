@@ -40,7 +40,6 @@ else
 fi
 
 # Ensure that the live environment has the right version of archinstall ready.
-
 if pacman -Qi archinstall 2>/dev/null | grep -E "^Version\s*:\s*3\.0\.8" >/dev/null; then
   echo "archinstall is version 3.0.8 (or 3.0.8-*)"
 else
