@@ -133,7 +133,9 @@ root_length = (
 root_partition = PartitionModification(
     status=ModificationStatus.Create,
     type=PartitionType.Primary,
-    start=Size(1, Unit.MiB, device.device_info.sector_size) + boot_partition.length + swap_partition.length,
+    start=Size(1, Unit.MiB, device.device_info.sector_size)
+    + boot_partition.length
+    + swap_partition.length,
     length=root_length,
     mountpoint=None,
     fs_type=FilesystemType.Btrfs,
