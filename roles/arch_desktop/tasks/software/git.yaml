@@ -109,11 +109,6 @@
   #when: gcm_verification.verified
   tags: install
 
-- name: Install manually
-  command: |
-    tar -xzf /tmp/gcm/usr/share/gcm/gcm-linux_amd64.2.4.1.tar.gz -C /usr/local/bin/
-  args:
-    creates: /usr/local/bin/git-credential-manager
 
 - name: Configure credential manager
   lineinfile:
