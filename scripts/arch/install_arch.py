@@ -236,7 +236,9 @@ with Installer(
 
     SysCommand(command, peek_output=True)
 
-    SysCommand(f"arch-chroot {installation.target} grub-mkconfig -o /boot/grub/grub.cfg")
+    SysCommand(
+        f"arch-chroot {installation.target} grub-mkconfig -o /boot/grub/grub.cfg"
+    )
 
     # Make a minimup profile to install the network config to
     profile_config = ProfileConfiguration(MinimalProfile())
