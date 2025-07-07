@@ -10,6 +10,9 @@
 # Ignore archinstall module
 archinstall-*
 
+# Ignore collections
+.collections
+
 # Ignore any password files
 *password*
 
