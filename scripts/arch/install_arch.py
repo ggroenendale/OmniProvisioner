@@ -355,8 +355,7 @@ with Installer(
             ),
         ]
     )
-    
-    
+
     print("Setting up Mirrors...")
     installation.set_mirrors(mirror_config=mirror_config)
 
