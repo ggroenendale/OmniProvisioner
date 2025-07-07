@@ -191,10 +191,20 @@ fs_handler.perform_filesystem_operations(show_countdown=False)
 
 # Start the guided installation
 with Installer(
-    target=Path("/mnt"), 
-    disk_config=disk_config, 
-    base_packages=['base', 'base-devel', 'linux-firmware', 'linux', 'linux-lts', 'linux-zen', 'linux-hardened', 'grub', 'efibootmgr'],
-    kernels=["linux"]
+    target=Path("/mnt"),
+    disk_config=disk_config,
+    base_packages=[
+        "base",
+        "base-devel",
+        "linux-firmware",
+        "linux",
+        "linux-lts",
+        "linux-zen",
+        "linux-hardened",
+        "grub",
+        "efibootmgr",
+    ],
+    kernels=["linux"],
 ) as installation:
     installation.mount_ordered_layout()
 
