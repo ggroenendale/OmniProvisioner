@@ -55,16 +55,16 @@
     mode: "0644"
   notify: Restart display manager
 
-- name: Configure SDDM for NVIDIA DRM
-  copy:
-    content: |
-      [Wayland]
-      CompositorCommand=QT_WAYLAND_FORCE_DPI=physical QT_QPA_PLATFORM=wayland XDG_SESSION_TYPE=wayland SDDM_USE_DRM=1 /usr/bin/startplasma-wayland
-
-      [X11]
-      DisplayCommand=XDG_SESSION_TYPE=x11 SDDM_USE_DRM=1 /usr/bin/startx
-    dest: /etc/sddm.conf.d/10-nvidia.conf
-  notify: Restart display manager
+#- name: Configure SDDM for NVIDIA DRM
+#  copy:
+#    content: |
+#      [Wayland]
+#      CompositorCommand=QT_WAYLAND_FORCE_DPI=physical QT_QPA_PLATFORM=wayland XDG_SESSION_TYPE=wayland SDDM_USE_DRM=1 /usr/bin/startplasma-wayland
+#
+#      [X11]
+#      DisplayCommand=XDG_SESSION_TYPE=x11 SDDM_USE_DRM=1 /usr/bin/startx
+#    dest: /etc/sddm.conf.d/10-nvidia.conf
+#  notify: Restart display manager
 
 - name: Enable Wayland support for NVIDIA
   copy:
