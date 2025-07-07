@@ -2,4 +2,9 @@
   hosts: localhost
   connection: local
   roles:
-    - arch_desktop
+    - role: '~/OmniProvisioner/roles/arch_desktop'
+      name: Arch Desktop
+  
+  vars_files:
+    - ~/OmniProvisioner/roles/arch_desktop/vars/user_encr.yaml
+
