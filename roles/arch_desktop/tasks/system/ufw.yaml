@@ -2,5 +2,7 @@
   pacman:
     name: ufw
     state: present
+
 - name: Allow SSH
+  become: true
   command: ufw allow 22/tcp
