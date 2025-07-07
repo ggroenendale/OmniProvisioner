@@ -39,6 +39,7 @@
 - name: Configure paru (optional)
   copy:
     content: |
+      [options]
       # Skip review prompts
       SkipReview
       # Remove make dependencies after install
