@@ -74,8 +74,8 @@
 
 - name: Arch Configuration | Install Browsers
   block:
-    - import_tasks: browser/librewolf.yaml
-    - import_tasks: browser/zen_browser.yaml
+    #- import_tasks: browser/librewolf.yaml
+    - import_tasks: browser/firefox.yaml
 
     # Run browser verifications
     - import_tasks: browser/verification.yaml
