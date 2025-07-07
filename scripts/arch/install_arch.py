@@ -217,7 +217,7 @@ with Installer(
     )
 
     # Add grub as bootloader
-    #installation.add_bootloader(Bootloader.Grub)
+    # installation.add_bootloader(Bootloader.Grub)
 
     SysCommand(f"arch-chroot {installation.target} /bin/bash -c " + '"echo ' + "'GRUB_ENABLE_CRYPTODISK=y'" + ' >> /etc/default/grub"')
 
