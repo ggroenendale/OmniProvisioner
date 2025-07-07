@@ -1,11 +1,12 @@
 ---
 - name: Install NVIDIA packages
+  become: true
   pacman:
     name:
       - nvidia
       - nvidia-utils
       - nvidia-settings
-      - lib32-nvidia-utils # For 32-bit application support
+      #- lib32-nvidia-utils # For 32-bit application support
       - opencl-nvidia # For GPU computing
     state: present
     update_cache: yes
