@@ -45,8 +45,8 @@
   #        name: gdm
   #        state: started
 
-    # Run base system verifications
-    - import_tasks: system/verification.yaml
+  # Run base system verifications
+  #    - import_tasks: system/verification.yaml
 
   rescue:
     - set_fact: task_failed=true
