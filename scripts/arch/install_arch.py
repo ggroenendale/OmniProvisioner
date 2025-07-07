@@ -166,14 +166,14 @@ disk_config = DiskLayoutConfiguration(
 )
 
 # Disk encryption configuration
-#disk_encryption = DiskEncryption(
+# disk_encryption = DiskEncryption(
 #    encryption_password=Password(plaintext=ENCR_PASSWORD),
 #    encryption_type=EncryptionType.Luks,
 #    partitions=[root_partition],
 #    hsm_device=None,
-#)
+# )
 
-#disk_config.disk_encryption = disk_encryption
+# disk_config.disk_encryption = disk_encryption
 
 """
 ============================================================================================================================
