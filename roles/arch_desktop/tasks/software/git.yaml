@@ -109,6 +109,28 @@
   #when: gcm_verification.verified
   tags: install
 
+#- name: Install manually
+#  command: |
+#    tar -xzf /tmp/gcm/usr/share/gcm/gcm-linux_amd64.2.4.1.tar.gz -C /usr/local/bin/
+#  args:
+#    creates: /usr/local/bin/git-credential-manager
+
+#- name: Configure credential manager
+#  lineinfile:
+#    path: "~/.gitconfig"
+#    line: |
+#      [credential]
+#          helper = /usr/bin/git-credential-manager
+#    insertafter: '^\[user\]'
+
+#- name: Remove temporary files
+#  file:
+#    path: "{{ item }}"
+#    state: absent
+#  loop:
+#    - /tmp/gcm-linux_amd64.2.6.1.tar.gz
+#    - /tmp/gcm-linux_amd64.2.6.1.tar.gz.asc
+#    - /tmp/gcm-public.asc
 
 # SSH Key Setup
 - name: Ensure .ssh directory exists
