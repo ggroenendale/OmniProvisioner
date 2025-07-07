@@ -252,7 +252,7 @@ with Installer(
         type=NicType.MANUAL,
         nics=[
             Nic(
-                iface="eno1",
+                # iface="eno1",
                 ip="192.168.1.101",
                 dhcp=True,
                 gateway="192.168.1.1",
