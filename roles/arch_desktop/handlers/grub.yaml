@@ -3,4 +3,5 @@
 # - Executes all scripts in /etc/grub.d/ (in numerical order)
 # - Combines all this to generate /boot/grub/grub.cfg
 - name: Update GRUB config
+  become: true
   command: grub-mkconfig -o /boot/grub/grub.cfg
