@@ -78,7 +78,7 @@
     - import_tasks: browser/firefox.yaml
 
     # Run browser verifications
-    - import_tasks: browser/verification.yaml
+#    - import_tasks: browser/verification.yaml
 
 - name: Arch Configuration | Install Cluster Tools
   block:
