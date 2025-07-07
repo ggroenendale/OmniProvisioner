@@ -70,7 +70,7 @@
     - import_tasks: devtools/ruby.yaml
     - import_tasks: devtools/rust.yaml
     - import_tasks: devtools/neovim.yaml
-    - import_tasks: devtools/dotfiles.yaml
+#    - import_tasks: devtools/dotfiles.yaml
 
 - name: Arch Configuration | Install Browsers
   block:
