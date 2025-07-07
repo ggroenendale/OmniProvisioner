@@ -42,6 +42,7 @@
 
 # GPG setup for signed commits
 - name: Install GPG (optional, for commit signing)
+  become: true
   pacman:
     name: gnupg
     state: present
