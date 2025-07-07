@@ -1,3 +1,8 @@
+- name: Update pacman db
+  become: true
+  command: |
+    pacman-db-upgrade
+
 - name: Arch Configuration | Install Base Configs
   block:
     # Add the user
