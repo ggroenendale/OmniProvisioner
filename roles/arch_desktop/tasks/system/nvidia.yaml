@@ -32,6 +32,7 @@
   notify: Rebuild initramfs
 
 - name: Enable DRM kernel mode setting
+  become: true
   lineinfile:
     path: /etc/default/grub
     regexp: "^GRUB_CMDLINE_LINUX_DEFAULT="
