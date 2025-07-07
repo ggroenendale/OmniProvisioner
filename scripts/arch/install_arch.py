@@ -151,7 +151,9 @@ root_partition = PartitionModification(
         SubvolumeModification(name="@tmp", mountpoint=Path("/var/tmp")),
         SubvolumeModification(name="@opt", mountpoint=Path("/opt")),
         SubvolumeModification(name="@docker", mountpoint=Path("/var/lib/docker")),
-        SubvolumeModification(name="@games", mountpoint=Path(f"/home/{ARCH_USERNAME}/Games")),
+        SubvolumeModification(
+            name="@games", mountpoint=Path(f"/home/{ARCH_USERNAME}/Games")
+        ),
         SubvolumeModification(name="@pkg", mountpoint=Path("/var/cache/pacman/pkg")),
     ],
 )
