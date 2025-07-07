@@ -105,10 +105,8 @@
   unarchive:
     src: /tmp/gcm-linux_amd64.2.6.1.tar.gz
     dest: /usr/local/bin/
-    remote_src: yes
-    extra_opts: ["--strip-components=1"]
     creates: /usr/local/bin/git-credential-manager
-  when: gcm_verification.verified
+  #when: gcm_verification.verified
   tags: install
 
 - name: Install manually
