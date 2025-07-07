@@ -1,0 +1,7 @@
+- name: Install Cliphist
+  become: true
+  pacman:
+    name:
+      - cliphist
+    state: present
+
