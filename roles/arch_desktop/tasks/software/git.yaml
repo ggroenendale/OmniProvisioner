@@ -110,14 +110,6 @@
   tags: install
 
 
-- name: Configure credential manager
-  lineinfile:
-    path: "~/.gitconfig"
-    line: |
-      [credential]
-          helper = /usr/bin/git-credential-manager
-    insertafter: '^\[user\]'
-
 - name: Remove temporary files
   file:
     path: "{{ item }}"
