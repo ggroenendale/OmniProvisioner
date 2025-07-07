@@ -240,6 +240,9 @@ with Installer(
         f"arch-chroot {installation.target} grub-mkconfig -o /boot/grub/grub.cfg"
     )
 
+    # Generate the fstab file
+    installation.genfstab()
+
     # Make a minimup profile to install the network config to
     profile_config = ProfileConfiguration(MinimalProfile())
     profile_handler.install_profile_config(installation, profile_config)
