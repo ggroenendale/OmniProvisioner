@@ -1,0 +1,13 @@
+- name: Install Neovim
+  become: true
+  pacman:
+    name:
+      - neovim
+    state: present
+
+- name: Install Lazygit
+  become: true
+  pacman:
+    name:
+      - lazygit
+    state: present
