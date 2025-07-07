@@ -124,7 +124,10 @@ device_modification.add_partition(swap_partition)
 # create a root partition
 
 root_length = (
-    device.device_info.total_size - boot_partition.length - swap_partition.length - Size(100, Unit.MiB, device.device_info.sector_size)
+    device.device_info.total_size
+    - boot_partition.length
+    - swap_partition.length
+    - Size(100, Unit.MiB, device.device_info.sector_size)
 )
 
 root_partition = PartitionModification(
