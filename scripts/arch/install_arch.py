@@ -223,17 +223,17 @@ with Installer(
     # SysCommand(f"arch-chroot {installation.target} /bin/bash -c " + '"echo ' + "'GRUB_ENABLE_CRYPTODISK=y'" + ' >> /etc/default/grub"')
 
     command = [
-        'arch-chroot',
+        "arch-chroot",
         installation.target,
-        'grub-install',
-        '--debug',
-        '--target=x86_64-efi',
-        '--efi-directory=/efi',
-        '--boot-directory=/boot',
-        '--bootloader-id=GRUB',
-        '--removable'
+        "grub-install",
+        "--debug",
+        "--target=x86_64-efi",
+        "--efi-directory=/efi",
+        "--boot-directory=/boot",
+        "--bootloader-id=GRUB",
+        "--removable",
     ]
-    
+
     SysCommand(command, peek_output=True)
 
     SysCommand(f"arch-chroot {installation.target} grub-mkconfig -o /boot/grub/grub.cfg")
