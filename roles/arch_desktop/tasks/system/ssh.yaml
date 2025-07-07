@@ -1,5 +1,6 @@
 ---
 - name: Install OpenSSH (the standard SSH server/client)
+  become: true
   pacman:
     name: openssh
     state: present
@@ -12,6 +13,7 @@
     mode: "0755"
 
 - name: Configure sshd_config (secure defaults)
+  become: true
   template:
     src: sshd_config.j2
     dest: /etc/ssh/sshd_config
@@ -46,7 +48,7 @@
       - sshfs # SSH filesystem
       - rsync # Efficient file transfers
     state: present
-    when: install_ssh_utils | default(false)
+  when: install_ssh_utils | default(false)
 
 - name: Configure client (~/.ssh/config)
   template:
