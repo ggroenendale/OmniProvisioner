@@ -1,4 +1,5 @@
 - name: Install networking tools
+  become: true
   pacman:
     name:
       - openssh # Remote access
@@ -11,12 +12,6 @@
       - iperf3 # Network performance testing
     state: present
 
-# Install NetworkManager
-- name: Install NetworkManager
-  pacman:
-    name: networkmanager
-    state: present
-
 # Enable and start service
 - name: Enable NetworkManager
   systemd:
@@ -25,28 +20,28 @@
     state: started
 
 # Configure Ethernet profile (DHCP)
-- name: Create Ethernet connection
-  command: |
-    nmcli connection add \
-      type ethernet \
-      con-name "Wired" \
-      ifname "{{ ansible_default_ipv4.interface }}" \
-      ipv4.method auto \
-      ipv6.method auto
-  args:
-    creates: /etc/NetworkManager/system-connections/Wired.nmconnection
-  register: nm_create
-  changed_when: nm_create.rc == 0
+#- name: Create Ethernet connection
+#  command: |
+#    nmcli connection add \
+#      type ethernet \
+#      con-name "Wired" \
+#      ifname "{{ ansible_default_ipv4.interface }}" \
+#      ipv4.method auto \
+#      ipv6.method auto
+#  args:
+#    creates: /etc/NetworkManager/system-connections/Wired.nmconnection
+#  register: nm_create
+#  changed_when: nm_create.rc == 0
 
 # Optional: Static IP configuration (alternative to DHCP)
-- name: Set static IP (optional)
-  command: |
-    nmcli connection modify "Wired" \
-      ipv4.method manual \
-      ipv4.addresses "192.168.1.100/24" \
-      ipv4.gateway "192.168.1.1" \
-      ipv4.dns "1.1.1.1,8.8.8.8"
-  when: static_ip | default(false)
+#- name: Set static IP (optional)
+#  command: |
+#    nmcli connection modify "Wired" \
+#      ipv4.method manual \
+#      ipv4.addresses "192.168.1.100/24" \
+#      ipv4.gateway "192.168.1.1" \
+#      ipv4.dns "1.1.1.1,8.8.8.8"
+#  when: static_ip | default(false)
 
 # Verify connection
 - name: Check Ethernet status
