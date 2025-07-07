@@ -27,15 +27,17 @@
 
     # Run the base install files
     - import_tasks: system/base.yaml
+    - import_tasks: networking/networkmanager.yaml
     - import_tasks: system/ssh.yaml
-    - import_tasks: system/ufw.yam
+    - import_tasks: system/ufw.yaml
     - import_tasks: software/git.yaml
     - import_tasks: system/grub.yaml
+    - import_tasks: system/paru.yaml
     - import_tasks: desktop_env/login_manager.yaml
     - import_tasks: system/nvidia.yaml
-    - import_tasks: system/paru.yaml
     - import_tasks: system/fonts.yaml
     - import_tasks: system/pipewire.yaml
+    - import_tasks: networking/bluetooth.yaml
 
     # Start SDDM after everything is configured
     - name: Start SDDM (final step)
