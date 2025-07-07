@@ -1,6 +1,4 @@
 - name: Provision Arch Desktop
   hosts: localhost
-  become: true
-
   roles:
     - arch_desktop
