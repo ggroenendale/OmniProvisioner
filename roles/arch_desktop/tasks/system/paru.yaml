@@ -1,5 +1,6 @@
 ---
 - name: Install paru dependencies (base-devel and git)
+  become: true
   pacman:
     name:
       - base-devel
