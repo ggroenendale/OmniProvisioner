@@ -13,3 +13,13 @@
       - man-db
       - man-pages
     state: present
+
+#- name: Install Rustup for rustc dependency
+#  command: |
+#    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+
+- name: Install Cargo
+  pacman:
+    name:
+      - rust
+    state: present
