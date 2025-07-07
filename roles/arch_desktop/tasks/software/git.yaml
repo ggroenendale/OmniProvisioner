@@ -90,9 +90,8 @@
   tags: download
 
 - name: Import GCM public key
-  community.crypto.gpg_key:
-    key: /tmp/gcm-public.asc
-    state: present
+  command: |
+    gpg --import /tmp/gcm-public.asc
   tags: verification
 
 - name: Verify tarball signature
