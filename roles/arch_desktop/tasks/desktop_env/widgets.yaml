@@ -1,0 +1,35 @@
+- name: Install EWW dependencies
+  become: true
+  pacman:
+    name:
+      #- rustc
+      #- cargo
+      - rust
+    state: present
+    update_cache: true
+
+- name: Check if EWW is available
+  stat:
+    path: /usr/local/bin/eww
+  register: eww_exists
+
+- name: Git Clone EWW
+  git:
+    repo: https://github.com/elkowar/eww
+    dest: /tmp/eww
+    clone: true
+    force: true
+  when: not eww_exists.stat.exists
+
+#- name: Cargo Build EWW
+#  command:
+#    cmd: cargo build --release --no-default-features --features=wayland
+#    chdir: /tmp/eww
+#  when: not eww_exists.stat.exists
+
+- name: Make eww executable
+  become: true
+  command: |
+    cp /tmp/eww/target/release/eww /usr/local/bin/
+    chmod +x /usr/local/bin
+  when: not eww_exists.stat.exists
