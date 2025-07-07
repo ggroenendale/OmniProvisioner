@@ -39,11 +39,11 @@
     - import_tasks: system/pipewire.yaml
     - import_tasks: networking/bluetooth.yaml
 
-    # Start SDDM after everything is configured
-    - name: Start SDDM (final step)
-      systemd:
-        name: sddm
-        state: started
+  #    # Start GDM after everything is configured
+  #    - name: Start GDM (final step)
+  #      systemd:
+  #        name: gdm
+  #        state: started
 
     # Run base system verifications
     - import_tasks: system/verification.yaml
