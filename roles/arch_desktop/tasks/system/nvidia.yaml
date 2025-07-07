@@ -67,8 +67,12 @@
 #  notify: Restart display manager
 
 - name: Enable Wayland support for NVIDIA
-  copy:
-    content: |
-      export GBM_BACKEND=nvidia-drm
-      export __GLX_VENDOR_LIBRARY_NAME=nvidia
-    dest: /etc/environment
+  become: true
+  command: |
+    echo "GBM_BACKEND=nvidia-drm" >> /etc/environment
+    echo "__GLX_VENDOR_LIBRARY_NAME=nvidia" >> /etc/environment
+#  copy:
+#    content: |
+#      export GBM_BACKEND=nvidia-drm
+#      export __GLX_VENDOR_LIBRARY_NAME=nvidia
+#    dest: /etc/environment
