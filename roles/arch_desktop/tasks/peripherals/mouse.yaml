@@ -1,0 +1,5 @@
+- name: Install solaar for MX Master 3 Mouse
+  pacman:
+    name:
+      - solaar
+    state: present
