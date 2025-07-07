@@ -95,12 +95,10 @@
   tags: verification
 
 - name: Verify tarball signature
-  community.crypto.verify_signature:
-    path: /tmp/gcm-linux_amd64.2.6.1.tar.gz
-    signature_path: /tmp/gcm-linux_amd64.2.6.1.tar.gz.asc
-    keyring: /etc/pacman.d/gnupg/pubring.gpg # Uses system keyring
+  command: |
+    gpg --verify /tmp/gcm-linux_amd64.2.6.1.tar.gz.asc /tmp/gcm-linux_amd64.2.6.1.tar.gz
   register: gcm_verification
-  failed_when: not gcm_verification.verified
+  #failed_when: not gcm_verification.verified
   tags: verification
 
 - name: Extract verified tarball
