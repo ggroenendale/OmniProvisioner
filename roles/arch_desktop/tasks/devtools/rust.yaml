@@ -1,0 +1,6 @@
+- name: Install Rust
+  become: true
+  pacman:
+    name:
+      - rust
+    state: present
