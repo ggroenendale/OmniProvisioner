@@ -1,18 +1,19 @@
 - name: Grub Configuration | Install Grub
   become: yes
   block:
-    - name: Install Grub and Dependencies
-      pacman:
-        name:
-          - grub
-          - efibootmgr
-          - os-prober
-        state: present
-        update_cache: yes
-
-    - name: Install Grub to EFI partition
-      command: grub-install --target=x86_64-efi --efi-directory=/efi --bootloader-id=GRUB
-
+    # These steps are handled in the archinstall python script
+    #- name: Install Grub and Dependencies
+    #  pacman:
+    #    name:
+    #      - grub
+    #      - efibootmgr
+    #      - os-prober
+    #    state: present
+    #    update_cache: yes
+    #
+    #- name: Install Grub to EFI partition
+    #  command: grub-install --target=x86_64-efi --efi-directory=/efi --bootloader-id=GRUB
+    
     - name: Generate GRUB config
       command: grub-mkconfig -o /boot/grub/grub.cfg
 
