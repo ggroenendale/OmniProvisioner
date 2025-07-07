@@ -1,7 +1,10 @@
 ---
 - name: Install git
+  become: true
   pacman:
-    name: git
+    name:
+      - git
+      - github-cli
     state: present
     update_cache: yes
 
