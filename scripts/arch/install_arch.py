@@ -253,7 +253,7 @@ with Installer(
         nics=[
             Nic(
                 # iface="eno1",
-                ip="192.168.1.101",
+                ip="192.168.1.201",
                 dhcp=True,
                 gateway="192.168.1.1",
                 dns=["9.9.9.9", "1.1.1.1"],
