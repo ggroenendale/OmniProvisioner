@@ -8,6 +8,12 @@
   pacman:
     update_cache: true
 
+- name: Make sure Pip is installed
+  become: true
+  pacman:
+    name: python-pip
+    state: present
+
 - name: Arch Configuration | Install Base Configs
   block:
     # Add the user
