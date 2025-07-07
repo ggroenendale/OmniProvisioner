@@ -219,7 +219,8 @@ with Installer(
     # Add grub as bootloader
     # installation.add_bootloader(Bootloader.Grub)
 
-    SysCommand(f"arch-chroot {installation.target} /bin/bash -c " + '"echo ' + "'GRUB_ENABLE_CRYPTODISK=y'" + ' >> /etc/default/grub"')
+    # This isn't necessary unless we try to encrypt in the future
+    # SysCommand(f"arch-chroot {installation.target} /bin/bash -c " + '"echo ' + "'GRUB_ENABLE_CRYPTODISK=y'" + ' >> /etc/default/grub"')
 
     command = [
         'arch-chroot',
