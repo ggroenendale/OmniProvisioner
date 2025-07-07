@@ -1,4 +1,5 @@
 - name: Provision Arch Desktop
   hosts: localhost
+  connection: local
   roles:
     - arch_desktop
