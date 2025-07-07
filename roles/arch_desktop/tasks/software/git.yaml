@@ -110,15 +110,6 @@
   tags: install
 
 
-- name: Remove temporary files
-  file:
-    path: "{{ item }}"
-    state: absent
-  loop:
-    - /tmp/gcm-linux_amd64.2.6.1.tar.gz
-    - /tmp/gcm-linux_amd64.2.6.1.tar.gz.asc
-    - /tmp/gcm-public.asc
-
 # SSH Key Setup
 - name: Ensure .ssh directory exists
   file:
