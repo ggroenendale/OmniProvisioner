@@ -349,6 +349,28 @@ A list of packages I need to install that are particularly necessary as librarie
 - Podman
 - gawk (makes bash config editing scripts work)
 
+## Issues and Problems
+
+### Mounting subvolumes had to be done manually
+
+There could be a step in the archinstall script to generate the fstab file because there very quickly became some issues with unmounted /var directory creating problems with pacman databases.
+
+### The install_wizard user suddenly unable to sudo
+
+I had to run `faillock --user install_wizard --reset`
+
+https://www.reddit.com/r/archlinux/comments/tty0t9/sudo_password_is_incorrect_even_tho_is_it_right/
+
+### Ansible log permissions for regular user
+
+### Networking and NetworkManager config
+
+I need to look more into configuring the NetworkManager config and it seems like the setting I made in the python file didnt take.
+
+### Installing paru requires makepkg which can't be installed as root
+
+I had difficulties automating this without any input from the user as it generally requires a non root account but still needs sudo login and thus a password prompt.
+
 ### Notes from python config file
 
 Node js install:
