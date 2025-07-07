@@ -22,14 +22,14 @@
     clone: yes
     force: yes
 
-- name: Build and install paru
-  command:
-    cmd: makepkg -si --noconfirm
-    chdir: /tmp/paru
-  become: yes
-  become_user: nobody # Build as unprivileged user (security best practice)
-  environment:
-    HOME: /tmp # Needed for makepkg to work correctly
+#- name: Build and install paru
+#  command:
+#    cmd: makepkg -si --noconfirm
+#    chdir: /tmp/paru
+#  #become: true
+#  become_user: install_wizard # Build as unprivileged user (security best practice)
+#  environment:
+#    HOME: /tmp # Needed for makepkg to work correctly
 
 - name: Clean up build files
   file:
