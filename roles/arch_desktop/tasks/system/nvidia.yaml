@@ -15,7 +15,7 @@
   stat:
     path: /usr/lib/modules/{{ ansible_kernel }}/extramodules
   register: dkms_needed
-  when: "'linux-lts' in ansible_kernel or 'linux-zen' in ansible_kernel"
+  #when: "'linux-lts' in ansible_kernel or 'linux-zen' in ansible_kernel"
 
 - name: Install DKMS variant if needed
   pacman:
