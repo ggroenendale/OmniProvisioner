@@ -8,7 +8,12 @@
     state: present
     update_cache: yes
 
-- name: Clone paru from AUR
+- name: Make a tmp directory
+  file:
+    path: /tmp/paru
+    mode: "0777"
+    state: directory
+
   git:
     repo: https://aur.archlinux.org/paru.git
     dest: /tmp/paru
