@@ -3,10 +3,10 @@
 # =========================
 
 # SSH Verification
-- name: Verify SSH is running
-  command: ss -tulpn | grep sshd
-  register: ssh_status
-  changed_when: false
+#- name: Verify SSH is running
+#  command: ss -tulpn | grep sshd
+#  register: ssh_status
+#  changed_when: false
 
 - name: Check SSH config syntax
   command: sshd -t
