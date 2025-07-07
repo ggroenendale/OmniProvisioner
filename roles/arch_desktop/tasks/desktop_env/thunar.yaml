@@ -1,0 +1,9 @@
+- name: Install Thunar
+  become: true
+  pacman:
+    name:
+      - thunar
+      - gvfs
+      - gvfs-smb
+      - sshfs
+    state: present
