@@ -1,0 +1,16 @@
+- name: Install nwg-look
+  pacman:
+    name:
+      - nwg-look
+    state: present
+
+- name: Install some themes
+  paru:
+    name:
+      - catppuccin-gtk-theme-mocha
+      - gtk-theme-bubble-dark-git
+    state: present
+
+- name: Clone bubble dark
+  git:
+    repo: https://
