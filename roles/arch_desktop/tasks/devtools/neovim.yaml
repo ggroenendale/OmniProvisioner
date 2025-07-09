@@ -3,6 +3,7 @@
   pacman:
     name:
       - neovim
+      - ripgrep
     state: present
 
 - name: Install Lazygit
