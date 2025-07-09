@@ -6,4 +6,9 @@
       - gvfs
       - gvfs-smb
       - sshfs
+      - thunar-volman # For volumes and removable media
+      - thunar-archive-plugin
+      - thunar-media-tags-plugin
+      - tumbler # For thumbnails
+      - catfish # For search
     state: present
