@@ -10,6 +10,7 @@
       - curl # Advanced HTTP client
       - rsync # Efficient file transfers
       - iperf3 # Network performance testing
+      - net-tools #
     state: present
 
 # Enable and start service
