@@ -85,10 +85,9 @@
 #    - import_tasks: cluster/kubernetes.yaml
 #    - import_tasks: cluster/zot.yaml
 #    - import_tasks: cluster/spark.yaml
-#
-#- name: Arch Configuration | Install Additional Software
-#  block:
-#    - import_tasks: software/gimp.yaml
-#    - import_tasks: software/inkscape.yaml
-#    - import_tasks: software/steam.yaml
-#
+
+- name: Arch Configuration | Install Additional Software
+  block:
+    - import_tasks: software/gimp.yaml
+    - import_tasks: software/inkscape.yaml
+    - import_tasks: software/steam.yaml
