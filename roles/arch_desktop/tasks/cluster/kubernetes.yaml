@@ -1,0 +1,8 @@
+- name: Install Kubernetes packages
+  pacman:
+    name:
+      - kubeadm
+      - kubelet
+      - kubectl
+      - containerd
+    state: present
