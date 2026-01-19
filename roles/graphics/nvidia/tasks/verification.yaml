@@ -1,0 +1,15 @@
+# Nvidia Verification
+- name: Verify NVIDIA module is loaded
+  command: lsmod | grep nvidia
+  register: nvidia_module
+  failed_when: nvidia_module.rc != 0
+  changed_when: false
+
+- name: Check NVIDIA driver version
+  command: nvidia-smi --query-gpu=driver_version --format=csv,noheader
+  register: nvidia_version
+  changed_when: false
+
+- name: Display driver version
+  debug:
+    msg: "NVIDIA driver {{ nvidia_version.stdout }} is installed"

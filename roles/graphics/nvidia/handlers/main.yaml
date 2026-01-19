@@ -1,0 +1,8 @@
+# Nvidia Driver Handlers
+- name: Rebuild initramfs
+  command: mkinitcpio -P
+
+- name: Restart display manager
+  service:
+    name: "{{ display_manager | default('sddm') }}"
+    state: restarted

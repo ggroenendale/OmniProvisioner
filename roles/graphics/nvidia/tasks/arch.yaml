@@ -1,0 +1,79 @@
+---
+- name: Install NVIDIA packages
+  become: true
+  pacman:
+    name:
+      - nvidia
+      - nvidia-utils
+      - nvidia-settings
+      #- lib32-nvidia-utils # For 32-bit application support
+      - opencl-nvidia # For GPU computing
+    state: present
+    update_cache: yes
+
+- name: Detect if using DKMS (for custom kernels)
+  stat:
+    path: /usr/lib/modules/{{ ansible_kernel }}/extramodules
+  register: dkms_needed
+  #when: "'linux-lts' in ansible_kernel or 'linux-zen' in ansible_kernel"
+
+- name: Install DKMS variant if needed
+  pacman:
+    name: nvidia-dkms
+    state: present
+  when: dkms_needed.stat.exists
+
+- name: Add NVIDIA modules to mkinitcpio
+  lineinfile:
+    path: /etc/mkinitcpio.conf
+    regexp: "^MODULES="
+    line: "MODULES=(nvidia nvidia_modeset nvidia_uvm nvidia_drm)"
+    backrefs: yes
+  notify: Rebuild initramfs
+
+- name: Enable DRM kernel mode setting
+  become: true
+  lineinfile:
+    path: /etc/default/grub
+    regexp: "^GRUB_CMDLINE_LINUX_DEFAULT="
+    line: 'GRUB_CMDLINE_LINUX_DEFAULT="loglevel=3 quiet nvidia-drm.modeset=1"'
+    backrefs: yes
+  notify: Update GRUB config
+
+- name: Create Xorg configuration
+  copy:
+    content: |
+      Section "Device"
+          Identifier     "Device0"
+          Driver         "nvidia"
+          VendorName     "NVIDIA Corporation"
+          BoardName      "GeForce GTX 1660 Super"
+      EndSection
+    dest: /etc/X11/xorg.conf.d/10-nvidia.conf
+    owner: root
+    group: root
+    mode: "0644"
+  notify: Restart display manager
+
+#- name: Configure SDDM for NVIDIA DRM
+#  copy:
+#    content: |
+#      [Wayland]
+#      CompositorCommand=QT_WAYLAND_FORCE_DPI=physical QT_QPA_PLATFORM=wayland XDG_SESSION_TYPE=wayland SDDM_USE_DRM=1 /usr/bin/startplasma-wayland
+#
+#      [X11]
+#      DisplayCommand=XDG_SESSION_TYPE=x11 SDDM_USE_DRM=1 /usr/bin/startx
+#    dest: /etc/sddm.conf.d/10-nvidia.conf
+#  notify: Restart display manager
+
+- name: Enable Wayland support for NVIDIA
+  become: true
+  command: |
+    echo "GBM_BACKEND=nvidia-drm" >> /etc/environment
+    echo "__GLX_VENDOR_LIBRARY_NAME=nvidia" >> /etc/environment
+
+#  copy:
+#    content: |
+#      export GBM_BACKEND=nvidia-drm
+#      export __GLX_VENDOR_LIBRARY_NAME=nvidia
+#    dest: /etc/environment
