@@ -1,0 +1,7 @@
+- name: Configure BTRFS
+  include_tasks: ../_btrfs/tasks/main.yaml
+  when: ansible_os_family == "Archlinux" and enable_btrfs | default(false)
+
+- name: Configure LVM
+  include_tasks: ../_lvm/tasks/main.yaml
+  when: ansible_os_family == "Debian" and enable_lvm | default(false)
