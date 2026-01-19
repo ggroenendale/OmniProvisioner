@@ -1,0 +1,13 @@
+- name: Install isc-dhcp-server
+  apt:
+    name: isc-dhcp-server
+    state: present
+
+- name: Install Config
+  copy:
+    src: /files/dhcpd.conf
+    dest: /etc/dhcp/dhcpd.conf
+    owner: root
+    group: root
+    mode: "0644"
+  notify: Restart DHCP
