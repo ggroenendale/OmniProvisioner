@@ -1,0 +1,15 @@
+- name: Configure Gitea
+  include_tasks: ../_version_control/gitea/tasks/main.yaml
+  when: ansible_os_family == "Debian" and enable_gitea | default(false)
+
+- name: Configure Git
+  include_tasks: ../_version_control/git/tasks/main.yaml
+  when: ansible_os_family == "Debian" and enable_git | default(false)
+
+- name: Configure Build Tools
+  include_tasks: ../_build_tools/tasks/main.yaml
+  when: ansible_os_family == "Debian" and enable_git | default(false)
+
+- name: Configure IDE
+  include_tasks: ../_ide/tasks/main.yaml
+  when: ansible_os_family == "Debian" and enable_git | default(false)

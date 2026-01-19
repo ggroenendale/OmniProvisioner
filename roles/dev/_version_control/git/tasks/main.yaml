@@ -1,0 +1,154 @@
+---
+- name: Install git
+  become: true
+  pacman:
+    name:
+      - git
+      - github-cli
+    state: present
+    update_cache: yes
+
+- name: Create ~/.config/git directory
+  file:
+    path: "~/.config/git"
+    state: directory
+    mode: "0755"
+
+- name: Configure global gitignore
+  copy:
+    content: |
+      # Compiled files
+      *.o
+      *.so
+      *.pyc
+      __pycache__/
+
+      # Editors
+      .vscode/
+      .idea/
+      *.swp
+
+      # System
+      .DS_Store
+      Thumbs.db
+    dest: "~/.config/git/ignore"
+    mode: "0644"
+
+- name: Set global git config
+  template:
+    src: templates/gitconfig.j2
+    dest: "~/.gitconfig"
+    mode: "0644"
+
+# GPG setup for signed commits
+- name: Install GPG (optional, for commit signing)
+  become: true
+  pacman:
+    name: gnupg
+    state: present
+  when: git_gpg_sign | default(false)
+
+- name: Configure GPG agent (optional)
+  copy:
+    content: |
+      enable-ssh-support
+      default-cache-ttl 86400
+      max-cache-ttl 86400
+    dest: "~/.gnupg/gpg-agent.conf"
+    mode: "0600"
+  when: git_gpg_sign | default(false)
+  notify: Reload GPG agent
+
+# Credential Manager
+- name: Ensure installation directories exist
+  file:
+    path: "{{ item }}"
+    state: directory
+  loop:
+    - /usr/local/lib/gcm-core
+    - /usr/local/bin
+
+- name: Download GCM tarball and signatures
+  block:
+    - name: Download tarball
+      get_url:
+        url: https://github.com/git-ecosystem/git-credential-manager/releases/download/v2.6.1/gcm-linux_amd64.2.6.1.tar.gz
+        dest: /tmp/gcm-linux_amd64.2.6.1.tar.gz
+        mode: "0644"
+
+    - name: Download signature file
+      get_url:
+        url: https://github.com/git-ecosystem/git-credential-manager/releases/download/v2.6.1/gcm-linux_amd64.2.6.1.tar.gz.asc
+        dest: /tmp/gcm-linux_amd64.2.6.1.tar.gz.asc
+        mode: "0644"
+
+    - name: Download public key
+      get_url:
+        url: https://github.com/git-ecosystem/git-credential-manager/releases/download/v2.6.1/gcm-public.asc
+        dest: /tmp/gcm-public.asc
+        mode: "0644"
+  tags: download
+
+- name: Import GCM public key
+  command: |
+    gpg --import /tmp/gcm-public.asc
+  tags: verification
+
+- name: Verify tarball signature
+  command: |
+    gpg --verify /tmp/gcm-linux_amd64.2.6.1.tar.gz.asc /tmp/gcm-linux_amd64.2.6.1.tar.gz
+  register: gcm_verification
+  #failed_when: not gcm_verification.verified
+  tags: verification
+
+- name: Extract verified tarball
+  unarchive:
+    src: /tmp/gcm-linux_amd64.2.6.1.tar.gz
+    dest: /usr/local/bin/
+    creates: /usr/local/bin/git-credential-manager
+  #when: gcm_verification.verified
+  tags: install
+
+#- name: Install manually
+#  command: |
+#    tar -xzf /tmp/gcm/usr/share/gcm/gcm-linux_amd64.2.4.1.tar.gz -C /usr/local/bin/
+#  args:
+#    creates: /usr/local/bin/git-credential-manager
+
+#- name: Configure credential manager
+#  lineinfile:
+#    path: "~/.gitconfig"
+#    line: |
+#      [credential]
+#          helper = /usr/bin/git-credential-manager
+#    insertafter: '^\[user\]'
+
+#- name: Remove temporary files
+#  file:
+#    path: "{{ item }}"
+#    state: absent
+#  loop:
+#    - /tmp/gcm-linux_amd64.2.6.1.tar.gz
+#    - /tmp/gcm-linux_amd64.2.6.1.tar.gz.asc
+#    - /tmp/gcm-public.asc
+
+# SSH Key Setup
+- name: Ensure .ssh directory exists
+  file:
+    path: "~/.ssh"
+    state: directory
+    mode: "0700"
+
+- name: Generate SSH key (if none exists)
+  openssh_keypair:
+    path: "~/.ssh/id_ed25519"
+    type: ed25519
+    force: false
+
+- name: Add SSH key to ssh-agent
+  lineinfile:
+    path: "~/.ssh/config"
+    line: |
+      AddKeysToAgent yes
+    create: yes
+    mode: "0600"

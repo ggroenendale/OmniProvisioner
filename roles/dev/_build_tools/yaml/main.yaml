@@ -1,0 +1,12 @@
+# This allows us to edit yaml files using bash commands
+- name: Install YQ yaml editor
+  pacman:
+    name:
+      - go-yq
+    state: present
+
+- name: Install crudini
+  paru:
+    name:
+      - crudini
+    state: present

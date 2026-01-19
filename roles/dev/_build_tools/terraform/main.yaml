@@ -1,0 +1,9 @@
+- name: Install Terraform
+  pacman:
+    name:
+      - terraform
+    state: present
+
+- name: Install cf-terraforming using go install
+  command: |
+    go install github.com/cloudflare/cf-terraforming/cmd/cf-terraforming@latest

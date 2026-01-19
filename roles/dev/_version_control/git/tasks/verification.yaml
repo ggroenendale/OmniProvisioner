@@ -1,0 +1,35 @@
+# Git Verification
+- name: Verify git installation
+  command: git --version
+  register: git_version
+  changed_when: false
+
+- name: Check git config
+  command: git config --list
+  register: git_config
+  changed_when: false
+
+- name: Display git status
+  debug:
+    msg:
+      - "Git {{ git_version.stdout }} installed"
+      - "User: {{ git_config.stdout | regex_search('user.name=.*') }}"
+      - "Email: {{ git_config.stdout | regex_search('user.email=.*') }}"
+
+- name: Verify SSH auth works
+  command: ssh -T git@github.com
+  register: ssh_check
+  changed_when: false
+  ignore_errors: true
+
+- name: Verify GCM config
+  command: git credential-manager get
+  when: use_gcm | default(false)
+  register: gcm_check
+  changed_when: false
+
+- name: Show auth status
+  debug:
+    msg:
+      - "SSH: {{ 'Working' if 'successfully authenticated' in ssh_check.stderr else 'Check keys' }}"
+      - "GCM: {{ 'Ready' if use_gcm | default(false) else 'Not configured' }}"
