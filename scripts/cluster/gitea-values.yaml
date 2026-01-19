@@ -1,0 +1,29 @@
+gitea:
+  config:
+    server:
+      DOMAIN: "192.168.1.12:32600"
+      ROOT_URL: "http://192.168.1.12:32600/"
+    webhook:
+      ALLOWED_HOST_LIST: "192.168.1.12,localhost,127.0.0.1,192.168.1.12:8000"
+    packages:
+      ENABLED: true
+    registry:
+      ENABLED: true
+      STORAGE_TYPE: local
+      SERVE_DATA: true
+      SERVE_DIRECT: true
+      PATH: /var/lib/gitea/data/registry
+      LOG_LEVEL: debug
+    repository:
+      ENABLE_PUSH_CREATE_USER: true
+service:
+  http:
+    type: NodePort
+    nodePort: 32600
+  ssh:
+    type: NodePort
+    nodePort: 32622
+  registry:
+    type: NodePort
+    nodePort: 32550
+    port: 5000

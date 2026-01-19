@@ -1,0 +1,34 @@
+services:
+  woodpecker-server:
+    image: woodpeckerci/woodpecker-server:v3
+    ports:
+      - 8000:8000
+    volumes:
+      - woodpecker-server-data:/var/lib/woodpecker/
+    environment:
+      - WOODPECKER_OPEN=true
+      - WOODPECKER_HOST=http://192.168.1.12:8000
+      - WOODPECKER_ADMIN=g.groenendale
+      - WOODPECKER_GITEA=true
+      - WOODPECKER_GITEA_URL=http://192.168.1.12:32600
+      - WOODPECKER_GITEA_CLIENT=1936549e-57b3-4936-8c66-6da4e90e257d
+      - WOODPECKER_GITEA_SECRET=gto_kesncfmpgfo672vpsxnxkxo4orgffjceyt7v7rdjft4zm62ozhjq
+      - WOODPECKER_GITEA_SKIP_VERIFY=true
+      - WOODPECKER_AGENT_SECRET=fa2de08d37fae71e59220160349d8a04a61648fcad7d0005c047daeafc67a368
+
+  woodpecker-agent:
+    image: woodpeckerci/woodpecker-agent:v3
+    command: agent
+    restart: always
+    depends_on:
+      - woodpecker-server
+    volumes:
+      - woodpecker-agent-config:/etc/woodpecker
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - WOODPECKER_SERVER=woodpecker-server:9000
+      - WOODPECKER_AGENT_SECRET=fa2de08d37fae71e59220160349d8a04a61648fcad7d0005c047daeafc67a368
+
+volumes:
+  woodpecker-server-data:
+  woodpecker-agent-config:

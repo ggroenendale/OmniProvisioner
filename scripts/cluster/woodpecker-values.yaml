@@ -1,0 +1,24 @@
+# Minimal working config for Woodpecker CI with Gitea/Gogs
+server:
+  env:
+    WOODPECKER_OPEN: true
+    WOODPECKER_HOST: http://192.168.1.12:32400 # Or your real domain / NodePort
+    WOODPECKER_ADMIN: g.groenendale # Your Git username to auto-promote
+    WOODPECKER_GITEA: true
+    WOODPECKER_GITEA_URL: http://192.168.1.12:32600 # Your Gitea service URL
+    WOODPECKER_GITEA_CLIENT: "1936549e-57b3-4936-8c66-6da4e90e257d" # From Gitea OAuth2
+    WOODPECKER_GITEA_SECRET: "gto_kesncfmpgfo672vpsxnxkxo4orgffjceyt7v7rdjft4zm62ozhjq" # From Gitea OAuth2
+    WOODPECKER_GITEA_SKIP_VERIFY: true
+    WOODPECKER_AGENT_SECRET: "fa2de08d37fae71e59220160349d8a04a61648fcad7d0005c047daeafc67a368"
+  service:
+    type: NodePort
+    port: 80
+    nodePort: 32400
+
+agent:
+  enabled: true
+  env:
+    WOODPECKER_SERVER: woodpecker-server:9000
+    WOODPECKER_AGENT_SECRET: "fa2de08d37fae71e59220160349d8a04a61648fcad7d0005c047daeafc67a368" # Must match server
+
+sharedSecret: "fa2de08d37fae71e59220160349d8a04a61648fcad7d0005c047daeafc67a368" # This must match the agent secret
