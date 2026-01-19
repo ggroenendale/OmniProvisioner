@@ -1,0 +1,10 @@
+# Nvidia Configuration
+# For SDDM (KDE)
+display_manager: sddm
+# For GDM (GNOME)
+# display_manager: gdm
+
+# For LightDM (XFCE/LXDE)
+# display_manager: lightdm
+
+enable_gimp: true

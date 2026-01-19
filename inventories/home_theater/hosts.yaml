@@ -1,0 +1,6 @@
+all:
+  children:
+    home_theater:
+      hosts:
+        livingroom_htpc: 10.0.0.30
+        bedroom_htpc: 10.0.0.31

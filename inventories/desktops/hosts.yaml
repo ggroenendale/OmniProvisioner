@@ -1,0 +1,10 @@
+all:
+  children:
+    desktops:
+      children:
+        main_desktop:
+          hosts:
+            arch_desktop:
+        workshop_desktop:
+          hosts:
+            bench_desktop:

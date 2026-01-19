@@ -1,0 +1,6 @@
+enable_gnome: false
+enable_kodi: true
+enable_wayland: true
+
+audio_target: "hdmi"
+power_profile: "performance"

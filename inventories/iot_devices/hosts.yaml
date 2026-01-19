@@ -1,0 +1,7 @@
+all:
+  children:
+    iot_devices:
+      hosts:
+        pi_bedroom: 10.0.0.20
+        pi_kitchen: 10.0.0.21
+        pi_livingroom: 10.0.0.22

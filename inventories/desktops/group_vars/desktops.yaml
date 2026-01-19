@@ -1,0 +1,6 @@
+# GRUB Configuration
+grub_timeout: 3
+grub_cmdline_linux_default: "loglevel=3 quiet splash"
+grub_theme_enabled: true
+grub_theme_name: "CyberEXS"
+grub_gfxmode: "1920x1080x32"
