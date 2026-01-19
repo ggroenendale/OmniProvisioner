@@ -1,0 +1,17 @@
+# LibreWolf Verification
+- name: Check LibreWolf version
+  command: librewolf --version
+  register: lw_version
+  changed_when: false
+
+- name: Validate extensions
+  stat:
+    path: "~/.librewolf/{{ ansible_user_id }}/extensions/"
+  register: ext_dir
+
+- name: Show status
+  debug:
+    msg:
+      - "LibreWolf {{ lw_version.stdout }} configured"
+      - "Extensions installed: {{ ext_dir.stat.exists }}"
+# Zen Browser Verification

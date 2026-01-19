@@ -1,0 +1,5 @@
+- name: Restart PulseAudio
+  systemd:
+    name: pulseaudio
+    state: restarted
+  when: "'pulseaudio' in ansible_facts.packages"

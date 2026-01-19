@@ -1,0 +1,16 @@
+# SDDM Verification
+- name: Check SDDM status
+  command: systemctl is-active sddm
+  register: sddm_status
+  changed_when: false
+
+- name: Verify NVIDIA in Xorg log
+  command: grep -i nvidia /var/log/Xorg.0.log
+  register: xorg_nvidia
+  changed_when: false
+
+- name: Display results
+  debug:
+    msg:
+      - "SDDM status: {{ sddm_status.stdout }}"
+      - 'Xorg NVIDIA detection: {{ ''SUCCESS'' if ''Loaded modules: "nvidia"'' in xorg_nvidia.stdout else ''FAILED'' }}'

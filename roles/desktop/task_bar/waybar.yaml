@@ -1,0 +1,6 @@
+- name: Install Waybar
+  become: true
+  pacman:
+    name:
+      - waybar
+    state: present

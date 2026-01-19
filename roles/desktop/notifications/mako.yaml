@@ -1,0 +1,6 @@
+- name: Install Mako Notifications
+  become: true
+  pacman:
+    name:
+      - mako
+    state: present
