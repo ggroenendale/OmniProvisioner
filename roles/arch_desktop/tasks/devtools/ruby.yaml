@@ -1,6 +1,0 @@
-- name: Install Ruby
-  become: true
-  pacman:
-    name: 
-      - ruby
-    state: present

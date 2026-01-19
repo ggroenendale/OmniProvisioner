@@ -1,6 +1,0 @@
-- name: Install hyprpolkitagent Authentication Daemon
-  become: true
-  pacman:
-    name:
-      - hyprpolkitagent
-    state: present

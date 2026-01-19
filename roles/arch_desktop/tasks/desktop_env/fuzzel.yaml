@@ -1,6 +1,0 @@
-- name: Install Fuzzel
-  become: true
-  pacman:
-    name:
-      - fuzzel
-    state: present

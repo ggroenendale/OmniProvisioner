@@ -1,8 +1,0 @@
-- name: Install pipewire
-  become: true
-  pacman:
-    name:
-      - pipewire
-      - wireplumber
-    state: present
-    update_cache: true

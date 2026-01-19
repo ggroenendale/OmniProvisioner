@@ -1,5 +1,0 @@
-- name: Install Steam
-  pacman:
-    name:
-      - steam
-    state: present

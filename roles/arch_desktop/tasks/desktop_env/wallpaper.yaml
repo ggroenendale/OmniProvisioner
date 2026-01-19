@@ -1,3 +1,0 @@
-- name: Install SWWW dependencies
-  command: |
-    paru -S swww --noconfirm

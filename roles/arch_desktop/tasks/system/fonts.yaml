@@ -1,8 +1,0 @@
-- name: Install Fonts
-  become: true
-  pacman:
-    name:
-      - ttf-nerd-fonts-symbols
-      - ttf-mononoki-nerd
-    state: present
-    update_cache: true

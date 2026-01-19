@@ -1,4 +1,0 @@
-- import_tasks: bluetooth.yaml
-- import_tasks: ssh.yaml
-- import_tasks: grub.yaml
-- import_tasks: nvidia.yaml
