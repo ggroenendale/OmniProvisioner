@@ -1,0 +1,4 @@
+- name: Restart bluetooth
+  systemd:
+    name: bluetooth
+    state: restarted
