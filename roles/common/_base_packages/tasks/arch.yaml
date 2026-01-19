@@ -1,0 +1,25 @@
+- name: Install essential base packages
+  pacman:
+    name:
+      - base
+      - base-devel # Compiler toolchain
+      - linux-headers # For DKMS modules
+      - archlinux-keyring # Keyring updates
+      - pacman-contrib # paccache, vercmp, etc.
+      - reflector # Mirror optimization
+      - linux
+      - linux-firmware
+      - mkinitcpio
+      - man-db
+      - man-pages
+    state: present
+
+#- name: Install Rustup for rustc dependency
+#  command: |
+#    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+
+- name: Install Cargo
+  pacman:
+    name:
+      - rust
+    state: present

@@ -1,0 +1,11 @@
+- name: Configure ArchLinux User
+  include_tasks: arch.yaml
+  when: ansible_os_family == "Archlinux" | default(false)
+
+- name: Configure Debian User
+  include_tasks: debian.yaml
+  when: ansible_os_family == "Debian" | default(false)
+
+- name: Configure Raspberry Pi User
+  include_tasks: raspberry_pi.yaml
+  when: ansible_os_family == "RaspberryPi" | default(false)

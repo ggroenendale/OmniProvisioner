@@ -1,0 +1,15 @@
+# roles/arch/tasks/users.yml
+- name: "Create user accounts"
+  become: true
+  user:
+    name: "{{ item.name }}"
+    password: "{{ item.password }}"
+    shell: "{{ item.shell }}"
+    state: present
+    groups: wheel
+  loop: "{{ arch_users }}"
+#- name: "Remove the install_wizard account"
+#  user:
+#    name: install_wizard
+#    state: absent
+#    remove: yes

@@ -1,0 +1,4 @@
+- import_tasks: ../_base_packages/handlers/main.yaml
+- import_tasks: ../_security/handlers/main.yaml
+- import_tasks: ../_systemd/handlers/main.yaml
+- import_tasks: ../_users/handlers/main.yaml

@@ -1,0 +1,25 @@
+- name: Initial Arch Commands
+  include_tasks: arch.yaml
+  when: ansible_os_family == "Archlinux"
+
+- name: Initial Debian Commands
+  include_tasks: debian.yaml
+  when: ansible_os_family == "Debian"
+
+- name: Install Base Packages
+  include_tasks: ../_base_packages/tasks/main.yaml
+
+- name: Apply Security Configurations
+  include_tasks: ../_security/tasks/main.yaml
+
+- name: Apply User Configuration
+  include_tasks: ../_users/tasks/main.yaml
+
+- name: Apply Systemd Configuration
+  include_tasks: ../_systemd/tasks/main.yaml
+
+- name: Apply Peripherals Configuration
+  include_tasks: ../_peripherals/tasks/main.yaml
+
+- name: Install Dotfiles
+  include_tasks: ../_dofiles/tasks/main.yaml

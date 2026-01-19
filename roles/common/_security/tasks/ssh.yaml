@@ -1,0 +1,6 @@
+- name: Install SSH
+  apt:
+    name:
+      - openssh
+      - sshpass
+    state: present

@@ -1,0 +1,17 @@
+- name: Install Dotfile dependency
+  become: true
+  pacman:
+    name:
+      - stow
+    state: present
+
+- name: Retrieve Dotfiles
+  git:
+    repo: https://github.com/ggroenendale/dotfiles.git
+    dest: ~/.dotfiles
+    clone: true
+
+- name: Stow dotfiles to .config
+  command:
+    cmd: stow .
+    chdir: ~/.dotfiles

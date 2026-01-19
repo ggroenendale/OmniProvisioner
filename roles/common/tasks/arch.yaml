@@ -1,0 +1,21 @@
+- name: Update pacman db
+  become: true
+  command: |
+    pacman-db-upgrade
+
+- name: Update pacman
+  become: true
+  pacman:
+    update_cache: true
+
+- name: Make sure Pip is installed
+  become: true
+  pacman:
+    name: python-pip
+    state: present
+
+- name: Install Python Requirements
+  pacman:
+    name:
+      - python-passlib
+    state: present
