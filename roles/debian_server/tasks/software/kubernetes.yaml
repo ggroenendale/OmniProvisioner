@@ -1,6 +1,0 @@
-- name: Kubernetes Install | Install kubectl
-  apt:
-    name: kubectl
-    state: present
-
-- name: Kubernetes Install | Install k3s
