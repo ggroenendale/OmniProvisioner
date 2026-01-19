@@ -1,5 +1,5 @@
-- name: Provision Arch Desktop
-  hosts: arch_desktop
+- name: Provision Debian Router
+  hosts: debian_router
   roles:
     - common
     - storage

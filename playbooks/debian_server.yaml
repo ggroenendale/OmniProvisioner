@@ -1,0 +1,21 @@
+# Debian Main Config
+#
+# This file should orchestrate all of the tasks that need to run for the Debian
+# Server install in a sensible order. Such as loading and installing basic packages
+# then configuring netork management, then as a later step setting up the NAS stuff
+# like LVM and Samba.
+
+- name: Provision Debian Router
+  hosts: debian_router
+  roles:
+    - common
+    - storage
+    - bootloader
+    - networking
+    - bluetooth
+    - network_storage
+    - graphics
+    - desktop
+    - dev
+    - cluster
+    - ai
