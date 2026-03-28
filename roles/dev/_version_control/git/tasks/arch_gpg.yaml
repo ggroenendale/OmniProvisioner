@@ -1,0 +1,15 @@
+- name: Install GPG
+  become: true
+  pacman:
+    name: gnupg
+    state: present
+
+- name: Configure GPG agent
+  copy:
+    content: |
+      enable-ssh-support
+      default-cache-ttl 86400
+      max-cache-ttl 86400
+    dest: "~/.gnupg/gpg-agent.conf"
+    mode: "0600"
+  notify: Reload GPG agent

@@ -1,0 +1,15 @@
+- name: Verify FreeCAD is installed
+  command: freecad --version
+  changed_when: false
+
+- name: Verify FreeCAD can start OpenGL context
+  command: freecad --console --run-python-console
+  register: freecad_gl_test
+  changed_when: false
+  failed_when: freecad_gl_test.rc != 0
+
+- name: Assert OpenGL capability present
+  assert:
+    that:
+      - graphics_opengl_check_enabled | default(false)
+      - opengl_version is defined

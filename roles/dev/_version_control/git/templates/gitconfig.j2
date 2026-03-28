@@ -1,0 +1,15 @@
+[user]
+{% if git_identity is defined %}
+    name = {{ git_identity.name }}
+    email = {{ git_identity.email }}
+{% endif %}
+
+{% if git_identity.signingkey is defined %}
+    signingkey = {{ git_identity.signingkey }}
+{% endif %}
+
+[init]
+    defaultBranch = main
+
+[core]
+    editor = nvim

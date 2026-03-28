@@ -1,0 +1,20 @@
+- name: Install Wayland
+  include_tasks: ../_wayland/tasks/main.yaml
+
+- name: Install Hyprland
+  include_tasks: ../_hyprland/tasks/main.yaml
+
+- name: Install Authentication
+  include_tasks: ../_wayland/tasks/main.yaml
+
+- name: Install Login Manager
+  include_tasks: ../_wayland/tasks/main.yaml
+
+- name: Install wayland
+  include_tasks: ../_wayland/tasks/main.yaml
+
+- name: Install wayland
+  include_tasks: ../_wayland/tasks/main.yaml
+
+- name: Install wayland
+  include_tasks: ../_wayland/tasks/main.yaml

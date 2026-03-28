@@ -1,12 +1,21 @@
-# Git Verification
-- name: Verify git installation
+- name: Verify git installed via pacman
+  command: pacman -Qi git
+  changed_when: false
+
+- name: Verify git is installed
   command: git --version
   register: git_version
   changed_when: false
+  failed_when: git_version.rc != 0
 
 - name: Check git config
   command: git config --list
   register: git_config
+  changed_when: false
+
+- name: Verify git user.name is set
+  command: git config --global user.name
+  register: git_username
   changed_when: false
 
 - name: Display git status
@@ -15,6 +24,11 @@
       - "Git {{ git_version.stdout }} installed"
       - "User: {{ git_config.stdout | regex_search('user.name=.*') }}"
       - "Email: {{ git_config.stdout | regex_search('user.email=.*') }}"
+
+- name: Assert git user.name
+  assert:
+    that:
+      - git_username.stdout == git_user_name
 
 - name: Verify SSH auth works
   command: ssh -T git@github.com

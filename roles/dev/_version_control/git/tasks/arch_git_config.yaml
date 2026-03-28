@@ -1,0 +1,41 @@
+# Preflight checks
+- name: Assert git identity is defined
+  assert:
+    that:
+      - git_identity is defined
+      - git_identity.name is defined
+      - git_identity.email is defined
+    fail_msg: >
+      Git identity is not defined for this host.
+      Define git_identity in host_vars or group_vars.
+  when: git_require_identity | default(true)
+
+- name: Verify Git is installed
+  command: git --version
+  register: git_check
+  changed_when: false
+  failed_when: git_check.rc != 0
+
+- name: Fail if Git is not available
+  fail:
+    msg: "Git must be installed before configuring git"
+  when: git_check.rc != 0
+
+  # Create config files
+- name: Create ~/.config/git directory
+  file:
+    path: "~/.config/git"
+    state: directory
+    mode: "0755"
+
+- name: Configure global gitignore
+  copy:
+    src: files/gitignore
+    dest: "~/.config/git/ignore"
+    mode: "0644"
+
+- name: Configure global git config
+  template:
+    src: templates/gitconfig.j2
+    dest: "~/.gitconfig"
+    mode: "0644"

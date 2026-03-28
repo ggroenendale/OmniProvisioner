@@ -1,0 +1,8 @@
+galaxy_info:
+  role_name: graphics_opengl
+  description: Verify OpenGL and GPU capability for desktop applications
+  platforms:
+    - name: Debian
+    - name: ArchLinux
+
+dependencies: []

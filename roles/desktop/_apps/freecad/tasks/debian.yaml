@@ -1,0 +1,4 @@
+- name: Install FreeCAD (Debian)
+  apt:
+    name: freecad
+    state: present

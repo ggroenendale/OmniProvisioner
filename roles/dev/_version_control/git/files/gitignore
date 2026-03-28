@@ -1,0 +1,15 @@
+
+      # Compiled files
+      *.o
+      *.so
+      *.pyc
+      __pycache__/
+
+      # Editors
+      .vscode/
+      .idea/
+      *.swp
+
+      # System
+      .DS_Store
+      Thumbs.db

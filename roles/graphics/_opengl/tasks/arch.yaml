@@ -1,0 +1,5 @@
+- name: Ensure glxinfo is available (Archlinux)
+  pacman:
+    name: mesa-utils
+    state: present
+  when: ansible_os_family == "Archlinux"

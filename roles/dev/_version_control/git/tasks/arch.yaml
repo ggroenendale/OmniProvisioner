@@ -1,0 +1,33 @@
+# Preflight check
+- name: Verify Git is installed
+  command: git --version
+  register: git_check
+  changed_when: false
+  failed_when: git_check.rc != 0
+
+- name: Fail if Git is not available
+  fail:
+    msg: "Git needs to be installed by base_packages before configuring git for user. Ensure Common/base_packages ran successfully"
+  when: git_check.rc != 0
+
+# Run Git Configuration tasks
+- import_tasks: arch_ssh.yaml
+  tags: [git, ssh]
+
+- import_tasks: arch_gpg.yaml
+  when: git_gpg_sign | default(false)
+  tags: [git, gpg]
+
+- import_tasks: arch_git_credentials.yaml
+  tags: [git, credentials]
+
+- import_tasks: arch_git_config.yaml
+  tags: [git, config]
+
+# Run Configuration tasks after Preflight succeeds
+- name: Install Github CLI
+  become: true
+  pacman:
+    name:
+      - github-cli
+    state: present

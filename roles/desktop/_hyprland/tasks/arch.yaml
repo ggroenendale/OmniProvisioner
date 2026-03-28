@@ -13,3 +13,4 @@
 #- name: Install Hyprland
 #  command: |
 #    paru -S --noconfirm hyprland-git
+

@@ -1,0 +1,16 @@
+- name: Run glxinfo
+  command: glxinfo -B
+  register: glxinfo_out
+  changed_when: false
+  failed_when: glxinfo_out.rc != 0
+
+- name: Extract OpenGL version
+  set_fact:
+    opengl_version: "{{ glxinfo_out.stdout | regex_search('OpenGL version string:\\s*(.*)', ,\\1') }}"
+
+- name: Assert OpenGL version present
+  assert:
+    that:
+      - opengl_version is defined
+    fail_msg: >
+      OpenGL not detected. GPU drivers or Mesa are missing.

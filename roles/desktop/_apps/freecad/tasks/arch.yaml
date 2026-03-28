@@ -1,0 +1,4 @@
+- name: Install FreeCAD (Arch)
+  pacman:
+    name: freecad
+    state: present

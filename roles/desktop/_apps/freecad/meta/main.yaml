@@ -1,0 +1,17 @@
+galaxy_info:
+  role_name: freecad
+  description: Install and verify FreeCAD Application
+  license: MIT
+  min_ansible_version: "2.14"
+
+  platforms:
+    - name: Debian
+      versions:
+        - bookwork
+        - bullseye
+    - name: ArchLinux
+      versions:
+        - all
+
+dependencies:
+  - role: graphics/opengl
