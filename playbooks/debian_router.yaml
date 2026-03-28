@@ -1,3 +1,9 @@
+# This playbook is configured using the ansible-pull methodology where there
+# is a script on the machine that pulls this configuration from a central
+# git repository.
+# This means the hosts needs to be set to "all" even though "all" would
+# just mean the single device that is running this configuration.
+# It also means that we have to set up a local inventory per machine.
 - name: Provision Debian Router
   hosts: debian_router
   roles:

@@ -1,5 +1,14 @@
 - name: Provision Arch Desktop
-  hosts: arch_desktop
+  hosts: localhost
+  connection: local
+  roles:
+    - role: "~/OmniProvisioner/roles/arch_desktop"
+      name: Arch Desktop
+
+  vars_files:
+    - ~/OmniProvisioner/roles/arch_desktop/vars/user_encr.yaml
+
+- hosts: arch_desktop
   roles:
     - common
     - storage
