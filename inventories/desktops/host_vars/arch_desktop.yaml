@@ -1,3 +1,8 @@
+# Git Identity
+git_identity:
+  name: "Geoff Groenendale"
+  email: "g.groenendale@gmail.com"
+
 # Nvidia Configuration
 # For SDDM (KDE)
 display_manager: sddm
@@ -7,4 +12,12 @@ display_manager: sddm
 # For LightDM (XFCE/LXDE)
 # display_manager: lightdm
 
-enable_gimp: true
+# Run verification tasks
+verify_enabled: true
+
+# Apps to enable install for
+desktop_apps:
+  freecad: true
+  gimp: true
+  inkscape: true
+  steam: true
