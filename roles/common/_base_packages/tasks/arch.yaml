@@ -1,22 +1,129 @@
+# === 1.) Package manager trust and tooling ===
+
+- name: Ensure Arch Linux keyring is present and up to date
+  pacman:
+    name: archlinux-keyring
+    state: present
+  tags: base_packages
+# Why
+# Prevents signature verification failures
+# Critical for fresh installs and long-lived systems
+# Should always come before large package installs
+
+- name: Install pacman helper utilities
+  pacman:
+    name: pacman-contrib
+    state: present
+  tags: base_packages
+# Why
+# paccache for cache cleanup
+# vercmp for version comparisons
+# Used later in maintenance automation
+
+- name: Install reflector for mirror management
+  pacman:
+    name: reflector
+    state: present
+  tags: base_packages
+# Why
+# Enables fast, reliable mirrors
+# Especially important on laptops and fresh installs
+# Often used immediately after base install
+
+# === 2.) Kernel, firmware, and headers ===
+
+- name: Install Linux Kernel
+  pacman:
+    name: linux
+    state: present
+  tags: base_packages
+# Why
+# Explicit install ensures kernel consistency
+# Makes kernel choice obvious (vs relying on meta packages)
+
+- name: Install Linux Firmware
+  pacman:
+    name: linux-firmware
+    state: present
+  stags: base_packages
+# Why
+# Required for Wi-Fi, GPUs, and other hardware
+# Prevents silent hardware failures later
+
+- name: Install Linux Kernel Headers
+  pacman:
+    name: linux-headers
+    state: present
+  tags: base_packages
+# Why
+# Required for DKMS modules (NVIDIA, VirtualBox, ZFS, etc.)
+# Needed before driver or virtualization roles run
+
+# === 3.) Init system and early boot tooling ===
+
+- name: Install mkinitcpio for initramfs generation
+  pacman:
+    name: mkinitcpio
+    state: present
+  tags: base_packages
+# Why
+# Required to rebuild initramfs after kernel or module changes
+# Used later by storage and encryption roles
+
+# === 4.) Base Development Environment
+
+- name: Install base system build tools
+  pacman:
+    name: base-devel
+    state: present
+  tags: base_packages
+# Why
+# Compiler toolchain
+# Required for AUR builds
+# Needed by DKMS and some Python packages
+# Note: You do not need to install 'base' explicitly — it’s a meta group usually present already.
+#       Installing base-devel explicitly is the meaningful part.
+
+# === 5.) Documentation and local help
+
+- name: Install manual pages database
+  pacman:
+    name: man-db
+    state: present
+  tags: base_packages
+
+- name: Install Linux manual pages
+  pacman:
+    name: man-pages
+    state: present
+  tags: base_packages
+# Why
+# Makes systems self-documenting
+# Critical when SSH’d into headless or rescue systems
+# Cheap and always useful
+
 - name: Install essential base packages
   pacman:
     name:
-      - base
-      - base-devel # Compiler toolchain
-      - linux-headers # For DKMS modules
-      - archlinux-keyring # Keyring updates
-      - pacman-contrib # paccache, vercmp, etc.
-      - reflector # Mirror optimization
-      - linux
-      - linux-firmware
-      - mkinitcpio
-      - man-db
-      - man-pages
+      - git
     state: present
 
-#- name: Install Rustup for rustc dependency
-#  command: |
-#    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+- name: Install Git Version control system
+  pacman:
+    name: git
+    state: present
+  tags: base_packages
+
+- set_fact:
+    git_available: true
+# Why?
+# Needed by:
+# AUR helpers
+# ansible-pull
+# dev tooling
+# Safe on servers
+# No user assumptions
+# Deterministic
 
 - name: Install Cargo
   pacman:

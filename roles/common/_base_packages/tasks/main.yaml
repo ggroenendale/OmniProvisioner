@@ -1,0 +1,7 @@
+- name: Install Arch Base Packages
+  include_tasks: arch.yaml
+  when: ansible_os_family == "Archlinux"
+
+- name: Install Debian Base Packages
+  include_tasks: debian.yaml
+  when: ansible_os_family == "Debian"

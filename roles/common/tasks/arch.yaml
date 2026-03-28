@@ -19,3 +19,5 @@
     name:
       - python-passlib
     state: present
+
+- name: Install Paru
